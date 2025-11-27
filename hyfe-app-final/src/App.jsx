@@ -1,96 +1,207 @@
 import React, { useState } from 'react';
+import './App.css';
+
+const teams = [
+  {
+    name: 'Quant',
+    focus: 'Systematic strategies, backtesting, and execution research.',
+    tags: ['Python', 'Data', 'Automation'],
+  },
+  {
+    name: 'IB',
+    focus: 'Deal screening, valuation frameworks, and capital advisory.',
+    tags: ['Pitch', 'Valuation', 'Diligence'],
+  },
+  {
+    name: 'Research',
+    focus: 'Macro signals, sector coverage, and risk narratives.',
+    tags: ['Insight', 'Macro', 'Reports'],
+  },
+  {
+    name: 'Derivative',
+    focus: 'Options, structured notes, and volatility diagnostics.',
+    tags: ['Pricing', 'Greeks', 'Vol'],
+  },
+];
+
+function TeamCard({ team, showEdit }) {
+  return (
+    <div className="team-card">
+      {showEdit && <span className="edit-chip">Edit</span>}
+      <p className="team-name">{team.name}</p>
+      <p className="team-focus">{team.focus}</p>
+      <div className="tag-row">
+        {team.tags.map((tag) => (
+          <span className="tag" key={tag}>
+            {tag}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [currentBatch, setCurrentBatch] = useState(38);
   const [historyBatches, setHistoryBatches] = useState([37, 36, 35]);
-  const [expandedBatch, setExpandedBatch] = useState(null);
+  const [expandedBatch, setExpandedBatch] = useState(37);
 
-  const toggleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-  };
+  const toggleLogin = () => setIsLoggedIn((prev) => !prev);
 
   const archiveCurrentBatch = () => {
-    setHistoryBatches([currentBatch, ...historyBatches]);
-    setCurrentBatch(currentBatch + 1);
+    setHistoryBatches((prev) => [currentBatch, ...prev]);
+    setCurrentBatch((prev) => prev + 1);
+    setExpandedBatch(currentBatch);
   };
 
   const toggleAccordion = (batch) => {
-    setExpandedBatch(expandedBatch === batch ? null : batch);
+    setExpandedBatch((prev) => (prev === batch ? null : batch));
   };
 
-  const TeamCard = ({ teamName, showEdit }) => (
-    <div className="relative p-4 m-2 w-40 h-24 flex items-center justify-center rounded-lg shadow-md bg-white text-blue-900 font-semibold hover:bg-gray-100 transition duration-200 border border-gray-200">
-      <span className="text-xl">{teamName}</span>
-      {showEdit && (
-        <button className="absolute top-1 right-1 px-2 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">
-          Edit
-        </button>
-      )}
-    </div>
-  );
-
   return (
-    <div className="min-h-screen bg-gray-50 font-sans">
-      <header className="bg-white text-blue-900 p-4 shadow-md flex justify-between items-center sticky top-0 z-10 border-b">
-        <h1 className="text-3xl font-bold">HYFE</h1>
-        <nav className="flex items-center space-x-6">
-          <a href="#" className="hover:text-blue-600 transition duration-200">About</a>
-          <a href="#" className="hover:text-blue-600 transition duration-200">Teams</a>
-          <a href="#" className="hover:text-blue-600 transition duration-200">History</a>
-          <button
-            onClick={toggleLogin}
-            className="ml-4 px-4 py-2 bg-blue-800 text-white rounded-lg hover:bg-blue-900 transition duration-200"
-          >
+    <div className="page">
+      <header className="top-bar">
+        <div className="brand">
+          <div className="brand-mark">H</div>
+          <div className="brand-copy">
+            <p className="brand-kicker">Hanyang Finance & Economics</p>
+            <h1>HYFE</h1>
+          </div>
+        </div>
+        <nav className="nav-links">
+          <a href="#about">About</a>
+          <a href="#teams">Teams</a>
+          <a href="#history">History</a>
+        </nav>
+        <div className="actions">
+          {isLoggedIn && <span className="badge">Admin mode</span>}
+          <button className="ghost-button" onClick={toggleLogin}>
             {isLoggedIn ? 'Logout' : 'Login'}
           </button>
-        </nav>
+        </div>
       </header>
 
-      <main className="container mx-auto mt-10 p-6 bg-white rounded-xl shadow-lg">
-        <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">{currentBatch}th Teams</h2>
-        <div className="flex justify-center flex-wrap gap-4">
-          <TeamCard teamName="Quant" showEdit={isLoggedIn} />
-          <TeamCard teamName="IB" showEdit={isLoggedIn} />
-          <TeamCard teamName="Research" showEdit={isLoggedIn} />
-          <TeamCard teamName="Derivative" showEdit={isLoggedIn} />
-        </div>
-        {isLoggedIn && (
-          <div className="text-center mt-8">
-            <button
-              onClick={archiveCurrentBatch}
-              className="px-6 py-3 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition duration-200"
-            >
-              Archive Current to History
-            </button>
+      <main className="app-shell">
+        <section className="hero" id="about">
+          <div className="hero-text">
+            <span className="eyebrow">Student finance studio</span>
+            <h2>
+              Building the next wave of
+              <span className="highlight"> market thinkers</span>
+            </h2>
+            <p className="lede">
+              HYFE blends research, technology, and capital markets training. Cohorts learn by shipping real projects,
+              then capturing experiments, outcomes, and playbooks for the next batch.
+            </p>
+            <div className="hero-actions">
+              <a className="primary-button" href="#teams">
+                View {currentBatch}th teams
+              </a>
+              <a className="secondary-button" href="#history">
+                See alumni trajectory
+              </a>
+            </div>
+            <div className="hero-meta">
+              <div className="stat-card">
+                <p className="label">Active projects</p>
+                <p className="stat">18</p>
+                <span className="hint">Research, markets, and tech sprints</span>
+              </div>
+              <div className="stat-card">
+                <p className="label">Mentor network</p>
+                <p className="stat">12</p>
+                <span className="hint">IB, quant, and venture alumni</span>
+              </div>
+              <div className="stat-card">
+                <p className="label">Tooling stack</p>
+                <p className="stat">Fast, transparent</p>
+                <span className="hint">Shared dashboards and weekly reviews</span>
+              </div>
+            </div>
           </div>
-        )}
-      </main>
+          <div className="hero-panel">
+            <div className="panel-label">Now running</div>
+            <div className="panel-body">
+              <p className="panel-title">{currentBatch}th Batch</p>
+              <p className="panel-text">
+                Four specialist teams drive this cohort. Track deliverables, review milestones, and capture the next
+                lessons learned for the archive.
+              </p>
+              <div className="panel-list">
+                {teams.map((team) => (
+                  <div className="panel-list-item" key={team.name}>
+                    <div className="dot" />
+                    <div>
+                      <p className="panel-item-title">{team.name}</p>
+                      <p className="panel-item-text">{team.focus}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
 
-      <section className="container mx-auto mt-12 p-6 bg-white rounded-xl shadow-lg mb-10">
-        <h2 className="text-3xl font-bold text-center text-blue-900 mb-6">History</h2>
-        <div className="max-w-2xl mx-auto space-y-2">
-          {historyBatches.map((batch) => (
-            <div key={batch} className="border rounded-lg overflow-hidden">
-              <button
-                onClick={() => toggleAccordion(batch)}
-                className="flex justify-between items-center w-full p-4 bg-gray-50 hover:bg-gray-100 text-blue-900 font-semibold text-lg transition duration-200 focus:outline-none"
-              >
-                <span>{batch}th Batch</span>
-                <span className={`transform transition-transform duration-300 ${expandedBatch === batch ? 'rotate-180' : ''}`}>▼</span>
-              </button>
-              {expandedBatch === batch && (
-                <div className="p-4 border-t border-gray-200 flex justify-center flex-wrap gap-4 bg-gray-50">
-                  <TeamCard teamName="Quant" showEdit={false} />
-                  <TeamCard teamName="IB" showEdit={false} />
-                  <TeamCard teamName="Research" showEdit={false} />
-                  <TeamCard teamName="Derivative" showEdit={false} />
-                </div>
+        <section className="panel" id="teams">
+          <div className="panel-header">
+            <div className="eyebrow">Current cohort</div>
+            <div className="panel-title-row">
+              <h3>{currentBatch}th Teams</h3>
+              {isLoggedIn && (
+                <button className="primary-button small" onClick={archiveCurrentBatch}>
+                  Archive this batch
+                </button>
               )}
             </div>
-          ))}
-        </div>
-      </section>
+            <p className="panel-description">
+              Real-world mandates with weekly review cadences. Teams keep their playbooks visible to the next class.
+            </p>
+          </div>
+          <div className="team-grid">
+            {teams.map((team) => (
+              <TeamCard key={team.name} team={team} showEdit={isLoggedIn} />
+            ))}
+          </div>
+        </section>
+
+        <section className="panel" id="history">
+          <div className="panel-header">
+            <div className="eyebrow">Legacy and learnings</div>
+            <h3>History</h3>
+            <p className="panel-description">
+              Browse prior batches to see what shipped, what broke, and what was learned along the way.
+            </p>
+          </div>
+
+          <div className="accordion">
+            {historyBatches.map((batch) => (
+              <div className="accordion-item" key={batch}>
+                <button className="accordion-trigger" onClick={() => toggleAccordion(batch)}>
+                  <div>
+                    <span className="accordion-kicker">Archive</span>
+                    <span className="accordion-title">{batch}th Batch</span>
+                  </div>
+                  <span className={`chevron ${expandedBatch === batch ? 'open' : ''}`}>
+                    <svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true" focusable="false">
+                      <path d="M2 3.25L9 9l7-5.75" fill="none" stroke="currentColor" strokeWidth="2.25" strokeLinecap="round" />
+                    </svg>
+                  </span>
+                </button>
+                {expandedBatch === batch && (
+                  <div className="accordion-panel">
+                    <div className="team-grid tight">
+                      {teams.map((team) => (
+                        <TeamCard key={`${batch}-${team.name}`} team={team} showEdit={false} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
