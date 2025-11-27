@@ -1,9 +1,0 @@
-name: My Config
-version: 1.0.0
-schema: v1
-
-models:
-  - title: Gemini 1.5 Pro
-    provider: gemini
-    model: gemini-1.5-pro-latest
-    apiKey: "AIzaSyCGwJuvZmUgejwvb7PhBtHyJ-4MgJZmKLs"
