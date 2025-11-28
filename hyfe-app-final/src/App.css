@@ -104,6 +104,41 @@ a {
   gap: 10px;
 }
 
+.actions.auth {
+  align-items: flex-start;
+}
+
+.auth-form {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.auth-input {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  min-width: 160px;
+}
+
+.auth-input:focus {
+  outline: 2px solid rgba(79, 209, 197, 0.4);
+  border-color: rgba(79, 209, 197, 0.6);
+}
+
+.auth-error {
+  color: #ff8b8b;
+  padding: 6px 32px 0;
+  font-weight: 600;
+}
+
+.saving-hint {
+  color: var(--muted);
+  font-weight: 600;
+}
+
 .badge {
   padding: 6px 10px;
   background: rgba(79, 209, 197, 0.15);
@@ -500,4 +535,96 @@ a {
     flex-direction: column;
     align-items: flex-start;
   }
+}
+
+/* === Modal Styles === */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  z-index: 100;
+}
+
+.modal-content {
+  position: relative;
+  background-color: #0b1224; /* panel color */
+  border-radius: 1rem;
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 32rem; /* 512px */
+  border: 1px solid rgba(255, 255, 255, 0.08); /* line color */
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.modal-close-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #9cb2d8; /* muted color */
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.modal-close-button:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #e9eef7; /* text color */
+}
+
+.modal-header {
+  margin-bottom: 1.5rem;
+}
+
+.modal-kicker {
+  font-family: 'Space Mono', monospace; /* More techy font */
+  font-size: 0.875rem;
+  color: #4fd1c5; /* accent color */
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.modal-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #e9eef7; /* text color */
+  letter-spacing: -0.02em;
+}
+
+.modal-body {
+  background-color: #0f1b33; /* card color */
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08); /* line color */
+}
+
+.pdf-label {
+  font-size: 0.875rem;
+  color: #9cb2d8; /* muted color */
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.pdf-cover-image {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.team-card {
+  cursor: pointer; /* Add cursor pointer to indicate it's clickable */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.team-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2), 0 10px 10px -5px rgba(0, 0, 0, 0.08);
 }

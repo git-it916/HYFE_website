@@ -1,0 +1,30 @@
+{
+  "currentBatch": 38,
+  "historyBatches": [37, 36, 35],
+  "teams": [
+    {
+      "name": "Quant",
+      "focus": "Systematic strategies, backtesting, and execution research.",
+      "tags": ["Python", "Data", "Automation"],
+      "pdfCoverUrl": "https://via.placeholder.com/400x565.png/0A2351/FFFFFF?text=Quant+Activities"
+    },
+    {
+      "name": "IB",
+      "focus": "Deal screening, valuation frameworks, and capital advisory.",
+      "tags": ["Pitch", "Valuation", "Diligence"],
+      "pdfCoverUrl": "https://via.placeholder.com/400x565.png/0A2351/FFFFFF?text=IB+Activities"
+    },
+    {
+      "name": "Research",
+      "focus": "Macro signals, sector coverage, and risk narratives.",
+      "tags": ["Insight", "Macro", "Reports"],
+      "pdfCoverUrl": "https://via.placeholder.com/400x565.png/0A2351/FFFFFF?text=Research+Activities"
+    },
+    {
+      "name": "Derivative",
+      "focus": "Options, structured notes, and volatility diagnostics.",
+      "tags": ["Pricing", "Greeks", "Vol"],
+      "pdfCoverUrl": "https://via.placeholder.com/400x565.png/0A2351/FFFFFF?text=Derivative+Activities"
+    }
+  ]
+}
