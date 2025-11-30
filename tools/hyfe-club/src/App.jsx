@@ -1,331 +1,210 @@
-import React, { useState } from 'react';
-import { 
-  TrendingUp, 
-  Building2, 
-  BookOpen, 
-  LineChart,
-  ChevronDown,
-  ChevronUp,
-  Edit,
-  Archive,
-  LogIn,
-  LogOut
+import React from 'react';
+import {
+  ArrowRight,
+  CheckCircle2,
+  LayoutGrid,
+  Shield,
+  Clock3,
+  Sparkles
 } from 'lucide-react';
 
+const teams = [
+  {
+    name: '퀀트팀',
+    desc: '퀀트팀은 알고리즘 퀀트팀과 포트폴리오 퀀트팀으로 세션을 진행합니다. 알고리즘 퀀트팀은 market microstructure 기반으로 알파를 발굴하고, 포트폴리오 퀀트팀은 portfolio optimization을 통해 전략을 구성합니다.'
+  },
+  {
+    name: 'IB팀',
+    desc: 'IB팀은 심도 있는 산업·기업 분석을 통해 핵심 투자포인트를 도출하고, Trading Comps 및 DCF 기반의 Valuation 기법을 학습합니다. 이를 바탕으로 IPO Pitch Book과 M&A IM 작성 실습을 수행하여 Deal Process 전반에 대한 이해와 실무 역량을 갖춥니다.'
+  },
+  {
+    name: '리서치팀',
+    desc: '리서치팀은 Top-Down 방식으로 섹터를 분석해 Top pick을 발굴합니다. 선정된 종목에 대한 투자의견을 제시하고 상대적·절대적 가치평가로 목표주가를 제시합니다.'
+  },
+  {
+    name: '파생상품팀',
+    desc: '파생상품팀은 매크로 분석으로 경제지표와 금리·통화정책을 해석하고, 스왑·옵션·선물 등 파생상품 이론과 가격결정 원리를 학습합니다. 실제 데이터를 활용해 이론을 적용하며 실무 감각을 높입니다.'
+  }
+];
+
+const features = [
+  { icon: CheckCircle2, title: '명확한 흐름', desc: '히어로 → 가치 제안 → 팀 소개 → 연락 CTA로 이어지는 단순 구조.' },
+  { icon: Shield, title: '집중된 정보', desc: '팀별 역할과 강점을 짧고 굵게 배치해 스크롤 부담을 줄였습니다.' },
+  { icon: Clock3, title: '빠른 이해', desc: '주요 포인트를 카드 형태로 나열해 방문자가 바로 이해하도록 설계.' }
+];
+
+const steps = [
+  { title: 'Introduce', text: '한눈에 들어오는 히어로와 핵심 문장' },
+  { title: 'Highlight', text: '가치 제안 3블록으로 요약' },
+  { title: 'Teams', text: '4개 팀의 세부 소개 카드' },
+  { title: 'Contact', text: '마지막 CTA로 연결' }
+];
+
 function App() {
-  // Authentication State
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Current Batch State
-  const [currentBatch, setCurrentBatch] = useState({
-    number: 38,
-    teams: [
-      {
-        id: 1,
-        name: 'Quant',
-        icon: TrendingUp,
-        description: 'Quantitative Analysis & Algorithmic Trading',
-        color: 'bg-blue-500',
-        hoverColor: 'hover:bg-blue-600'
-      },
-      {
-        id: 2,
-        name: 'IB',
-        icon: Building2,
-        description: 'Investment Banking & Corporate Finance',
-        color: 'bg-navy-700',
-        hoverColor: 'hover:bg-navy-800'
-      },
-      {
-        id: 3,
-        name: 'Research',
-        icon: BookOpen,
-        description: 'Financial Research & Market Analysis',
-        color: 'bg-gray-600',
-        hoverColor: 'hover:bg-gray-700'
-      },
-      {
-        id: 4,
-        name: 'Derivative',
-        icon: LineChart,
-        description: 'Derivatives Trading & Risk Management',
-        color: 'bg-indigo-600',
-        hoverColor: 'hover:bg-indigo-700'
-      }
-    ]
-  });
-
-  // History State
-  const [historyBatches, setHistoryBatches] = useState([
-    {
-      number: 37,
-      teams: ['Quant', 'IB', 'Research', 'Derivative']
-    },
-    {
-      number: 36,
-      teams: ['Quant', 'IB', 'Research', 'Derivative']
-    },
-    {
-      number: 35,
-      teams: ['Quant', 'IB', 'Research', 'Derivative']
-    },
-    {
-      number: 34,
-      teams: ['Quant', 'IB', 'Research', 'Derivative']
-    }
-  ]);
-
-  // Expanded batch state for accordion
-  const [expandedBatch, setExpandedBatch] = useState(null);
-
-  // Toggle Login
-  const handleLogin = () => {
-    setIsLoggedIn(!isLoggedIn);
-  };
-
-  // Archive Current Teams to History
-  const handleArchive = () => {
-    const confirmed = window.confirm(
-      `Are you sure you want to archive ${currentBatch.number}th teams to history?`
-    );
-    
-    if (confirmed) {
-      // Add current batch to history
-      const newHistoryBatch = {
-        number: currentBatch.number,
-        teams: currentBatch.teams.map(team => team.name)
-      };
-      
-      setHistoryBatches([newHistoryBatch, ...historyBatches]);
-      
-      // Increment current batch number
-      setCurrentBatch({
-        ...currentBatch,
-        number: currentBatch.number + 1
-      });
-      
-      alert(`${currentBatch.number}th batch archived successfully! Now showing ${currentBatch.number + 1}th batch.`);
-    }
-  };
-
-  // Toggle batch expansion in history
-  const toggleBatchExpansion = (batchNumber) => {
-    setExpandedBatch(expandedBatch === batchNumber ? null : batchNumber);
-  };
-
-  // Handle team card click
-  const handleTeamClick = (teamName, batchNumber) => {
-    alert(`Navigating to ${teamName} - Batch ${batchNumber}`);
-  };
-
-  // Handle edit click
-  const handleEditTeam = (teamName) => {
-    alert(`Edit mode for ${teamName} team`);
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header / Navbar */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {/* Logo and Club Name */}
-            <div className="flex items-center space-x-3">
-              <div className="bg-navy-800 text-white w-12 h-12 rounded-lg flex items-center justify-center font-bold text-xl">
-                HY
-              </div>
-              <div>
-                <h1 className="text-2xl font-bold text-navy-900">HYFE</h1>
-                <p className="text-xs text-gray-600">Financial Engineering Club</p>
-              </div>
+    <div className="min-h-screen bg-blue-50 text-navy-900">
+      <header className="bg-white shadow-sm">
+        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="h-10 w-10 rounded-xl bg-navy-800 text-white flex items-center justify-center font-semibold">
+              HY
             </div>
-
-            {/* Navigation Links */}
-            <div className="flex items-center space-x-6">
-              <a href="#about" className="text-gray-700 hover:text-navy-800 font-medium transition-colors">
-                About
-              </a>
-              <a href="#teams" className="text-gray-700 hover:text-navy-800 font-medium transition-colors">
-                Teams
-              </a>
-              <button
-                onClick={handleLogin}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg font-medium transition-all ${
-                  isLoggedIn
-                    ? 'bg-red-500 hover:bg-red-600 text-white'
-                    : 'bg-navy-800 hover:bg-navy-900 text-white'
-                }`}
-              >
-                {isLoggedIn ? (
-                  <>
-                    <LogOut size={18} />
-                    <span>Logout</span>
-                  </>
-                ) : (
-                  <>
-                    <LogIn size={18} />
-                    <span>Login</span>
-                  </>
-                )}
-              </button>
+            <div>
+              <p className="text-sm text-navy-700">Hanyang Financial Engineering</p>
+              <h1 className="text-lg font-semibold">HYFE</h1>
             </div>
           </div>
-        </nav>
+          <button className="inline-flex items-center space-x-2 px-4 py-2 bg-navy-800 text-white rounded-lg hover:bg-navy-900 transition">
+            <span>문의하기</span>
+            <ArrowRight size={18} />
+          </button>
+        </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 py-12">
-        {/* Admin Controls */}
-        {isLoggedIn && (
-          <div className="mb-8 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <span className="text-yellow-800 font-semibold">Admin Mode Active</span>
-              </div>
-              <button
-                onClick={handleArchive}
-                className="flex items-center space-x-2 bg-navy-800 hover:bg-navy-900 text-white px-4 py-2 rounded-lg font-medium transition-all"
-              >
-                <Archive size={18} />
-                <span>Archive Current Teams to History</span>
+      <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
+        {/* Hero */}
+        <section className="grid gap-10 lg:grid-cols-2 items-center">
+          <div className="space-y-6">
+            <div className="inline-flex items-center space-x-2 bg-white text-navy-800 rounded-full px-3 py-1 shadow-sm">
+              <Sparkles size={16} />
+              <span className="text-sm font-medium">Quant · IB · Research · Derivatives</span>
+            </div>
+            <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
+              실전형 금융공학팀, 4개 트랙으로 성장합니다.
+            </h2>
+            <p className="text-lg text-navy-700">
+              snusmic.com처럼 단순하고 깔끔한 배치를 유지하면서, HYFE의 4개 팀 소개와 핵심 가치를 한 페이지에 담았습니다.
+            </p>
+            <div className="flex flex-wrap gap-3">
+              <button className="px-5 py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-900 transition inline-flex items-center space-x-2">
+                <span>지원/문의</span>
+                <ArrowRight size={18} />
+              </button>
+              <button className="px-5 py-3 bg-white text-navy-900 rounded-lg border border-navy-100 hover:border-navy-300 transition">
+                더 알아보기
               </button>
             </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="bg-white rounded-lg p-4 border border-navy-100">
+                <p className="text-sm font-semibold text-navy-700">실무 중심</p>
+                <p className="text-sm text-navy-600">시장 분석과 모델링을 실전 프로젝트로 검증</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-navy-100">
+                <p className="text-sm font-semibold text-navy-700">팀 기반 성장</p>
+                <p className="text-sm text-navy-600">4개 팀이 서로 다른 역량을 보완</p>
+              </div>
+              <div className="bg-white rounded-lg p-4 border border-navy-100">
+                <p className="text-sm font-semibold text-navy-700">커리어 가속</p>
+                <p className="text-sm text-navy-600">IB·퀀트·리서치·파생 실무 감각 확보</p>
+              </div>
+            </div>
           </div>
-        )}
-
-        {/* Current Teams Section */}
-        <section id="teams" className="mb-16">
-          <h2 className="text-4xl font-bold text-center text-navy-900 mb-8">
-            {currentBatch.number}th Teams
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {currentBatch.teams.map((team) => {
-              const IconComponent = team.icon;
-              return (
-                <div
-                  key={team.id}
-                  className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-2xl transition-all transform hover:-translate-y-2 cursor-pointer"
-                  onClick={() => handleTeamClick(team.name, currentBatch.number)}
-                >
-                  <div className={`${team.color} h-32 flex items-center justify-center`}>
-                    <IconComponent size={64} className="text-white" />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-2xl font-bold text-navy-900 mb-2">{team.name}</h3>
-                    <p className="text-gray-600 text-sm mb-4">{team.description}</p>
-                    
-                    {isLoggedIn && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleEditTeam(team.name);
-                        }}
-                        className="flex items-center space-x-2 w-full justify-center bg-gray-100 hover:bg-gray-200 text-gray-800 px-4 py-2 rounded-lg font-medium transition-all"
-                      >
-                        <Edit size={16} />
-                        <span>Edit Team</span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
+          <div className="bg-white rounded-2xl shadow-lg border border-navy-100 p-6 space-y-4">
+            <div className="space-y-1">
+              <p className="text-sm text-navy-600">간단 소개 카드</p>
+              <h3 className="text-2xl font-semibold">HYFE 한눈에 보기</h3>
+            </div>
+            <div className="space-y-3">
+              <div className="rounded-lg border border-navy-100 p-3">
+                <p className="text-sm text-navy-600">팀 구성</p>
+                <p className="text-base font-semibold">퀀트 · IB · 리서치 · 파생상품</p>
+              </div>
+              <div className="rounded-lg border border-navy-100 p-3">
+                <p className="text-sm text-navy-600">활동</p>
+                <p className="text-base font-semibold">세션 · 프로젝트 · 실습 · 밸류에이션</p>
+              </div>
+              <div className="rounded-lg border border-navy-100 p-3">
+                <p className="text-sm text-navy-600">결과물</p>
+                <p className="text-base font-semibold">전략 리포트 · Pitch Book · IM · 백테스트</p>
+              </div>
+              <button className="w-full py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-900 transition inline-flex items-center justify-center space-x-2">
+                <span>소개 자료 받기</span>
+                <ArrowRight size={18} />
+              </button>
+            </div>
+            <p className="text-sm text-navy-600">
+              세부 내용은 추후 제공할 자료로 교체하세요.
+            </p>
           </div>
         </section>
 
-        {/* History Section */}
-        <section className="mb-16">
-          <h2 className="text-3xl font-bold text-center text-navy-900 mb-8">
-            Team History
-          </h2>
-          
-          <div className="max-w-4xl mx-auto space-y-3">
-            {historyBatches.map((batch) => (
-              <div key={batch.number} className="bg-white rounded-lg shadow-md overflow-hidden">
-                {/* Batch Bar */}
-                <button
-                  onClick={() => toggleBatchExpansion(batch.number)}
-                  className="w-full flex items-center justify-between p-5 hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center space-x-4">
-                    <div className="bg-navy-800 text-white w-16 h-16 rounded-lg flex items-center justify-center font-bold text-lg">
-                      {batch.number}th
-                    </div>
-                    <div className="text-left">
-                      <h3 className="text-xl font-bold text-navy-900">
-                        Batch {batch.number}
-                      </h3>
-                      <p className="text-sm text-gray-600">
-                        {batch.teams.length} Teams
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="text-gray-500">
-                    {expandedBatch === batch.number ? (
-                      <ChevronUp size={24} />
-                    ) : (
-                      <ChevronDown size={24} />
-                    )}
-                  </div>
-                </button>
-
-                {/* Expanded Team Buttons */}
-                {expandedBatch === batch.number && (
-                  <div className="border-t border-gray-200 p-5 bg-gray-50">
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {batch.teams.map((teamName, index) => {
-                        // Get icon and color based on team name
-                        const teamInfo = currentBatch.teams.find(t => t.name === teamName);
-                        const IconComponent = teamInfo?.icon || TrendingUp;
-                        const teamColor = teamInfo?.color || 'bg-gray-600';
-                        
-                        return (
-                          <button
-                            key={index}
-                            onClick={() => handleTeamClick(teamName, batch.number)}
-                            className={`${teamColor} hover:opacity-90 text-white px-4 py-3 rounded-lg font-medium transition-all flex items-center justify-center space-x-2`}
-                          >
-                            <IconComponent size={18} />
-                            <span>{teamName}</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </div>
-                )}
+        {/* Features */}
+        <section className="space-y-6">
+          <h3 className="text-2xl font-bold">페이지 핵심 포인트</h3>
+          <div className="grid gap-6 md:grid-cols-3">
+            {features.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="bg-white rounded-xl p-5 shadow-sm border border-navy-100 space-y-3">
+                <div className="h-10 w-10 rounded-lg bg-navy-50 text-navy-800 flex items-center justify-center">
+                  <Icon size={20} />
+                </div>
+                <h4 className="text-lg font-semibold">{title}</h4>
+                <p className="text-sm text-navy-700">{desc}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* About Section */}
-        <section id="about" className="bg-white rounded-xl shadow-lg p-8 md:p-12">
-          <h2 className="text-3xl font-bold text-center text-navy-900 mb-6">
-            About HYFE
-          </h2>
-          <div className="max-w-3xl mx-auto text-center">
-            <p className="text-gray-700 text-lg leading-relaxed mb-4">
-              The Financial Engineering Club at Hanyang University (HYFE) is dedicated to 
-              fostering excellence in quantitative finance, investment banking, research, 
-              and derivatives trading.
-            </p>
-            <p className="text-gray-700 text-lg leading-relaxed">
-              Our members engage in cutting-edge financial analysis, market research, 
-              and practical trading strategies to prepare for careers in the financial industry.
-            </p>
+        {/* Teams */}
+        <section className="space-y-6">
+          <div className="flex items-center space-x-3">
+            <LayoutGrid className="text-navy-800" size={20} />
+            <h3 className="text-2xl font-bold">4개 팀 소개</h3>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2">
+            {teams.map((team) => (
+              <div key={team.name} className="bg-white border border-navy-100 rounded-xl p-5 shadow-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xl font-semibold">{team.name}</h4>
+                  <span className="text-sm text-navy-600">HYFE</span>
+                </div>
+                <p className="text-sm text-navy-700 leading-relaxed">{team.desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Process */}
+        <section className="bg-white border border-navy-100 rounded-2xl p-8 space-y-6 shadow-sm">
+          <div className="flex items-center space-x-3">
+            <Shield className="text-navy-800" size={20} />
+            <h3 className="text-2xl font-bold">페이지 흐름</h3>
+          </div>
+          <div className="grid gap-4 md:grid-cols-2">
+            {steps.map((step) => (
+              <div key={step.title} className="rounded-xl border border-navy-100 p-4 flex space-x-3">
+                <div className="h-9 w-9 rounded-lg bg-navy-50 text-navy-800 flex items-center justify-center font-semibold">
+                  {step.title}
+                </div>
+                <div>
+                  <p className="font-semibold">{step.title}</p>
+                  <p className="text-sm text-navy-700">{step.text}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Secondary CTA */}
+        <section className="bg-navy-900 text-white rounded-2xl p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4">
+          <div className="space-y-2">
+            <p className="uppercase tracking-wide text-xs text-navy-200">Contact</p>
+            <h3 className="text-3xl font-semibold">HYFE와 함께할 준비가 되셨나요?</h3>
+            <p className="text-navy-100">팀별 상세 자료와 세션 일정은 문의 시 공유드립니다.</p>
+          </div>
+          <div className="flex space-x-3">
+            <button className="px-5 py-3 bg-white text-navy-900 rounded-lg font-semibold hover:bg-navy-50 transition inline-flex items-center space-x-2">
+              <span>문의하기</span>
+              <ArrowRight size={18} />
+            </button>
+            <button className="px-5 py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-700 transition">
+              소개서 받기
+            </button>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-navy-900 text-white py-8 mt-16">
-        <div className="container mx-auto px-4 text-center">
-          <p className="text-gray-400">
-            &copy; 2024 HYFE - Hanyang Financial Engineering Club. All rights reserved.
-          </p>
-        </div>
+      <footer className="py-10 text-center text-navy-700 text-sm">
+        <p>레이아웃 영감: snusmic.com 스타일. 텍스트는 추후 제공 내용으로 교체하세요.</p>
       </footer>
     </div>
   );
