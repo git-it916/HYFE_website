@@ -1,213 +1,694 @@
 import React from 'react';
-import {
-  ArrowRight,
-  CheckCircle2,
-  LayoutGrid,
-  Shield,
-  Clock3,
-  Sparkles
-} from 'lucide-react';
+import { BrowserRouter, Routes, Route, Link, useParams, useLocation } from 'react-router-dom';
 
-const teams = [
+const activities = [
   {
-    name: '퀀트팀',
-    desc: '퀀트팀은 알고리즘 퀀트팀과 포트폴리오 퀀트팀으로 세션을 진행합니다. 알고리즘 퀀트팀은 market microstructure 기반으로 알파를 발굴하고, 포트폴리오 퀀트팀은 portfolio optimization을 통해 전략을 구성합니다.'
+    id: 'quant',
+    title: 'Quant Lab',
+    summary: 'Strategy research, backtesting, and portfolio construction with a focus on market microstructure.',
+    bullets: [
+      'Idea scouting, signal design, and factor sanity checks',
+      'Python backtests with basic risk/turnover controls',
+      'Portfolio construction experiments and teardown sessions',
+    ],
   },
   {
-    name: 'IB팀',
-    desc: 'IB팀은 심도 있는 산업·기업 분석을 통해 핵심 투자포인트를 도출하고, Trading Comps 및 DCF 기반의 Valuation 기법을 학습합니다. 이를 바탕으로 IPO Pitch Book과 M&A IM 작성 실습을 수행하여 Deal Process 전반에 대한 이해와 실무 역량을 갖춥니다.'
+    id: 'ib',
+    title: 'IB & Valuation',
+    summary: 'Comparable analyses, DCF practice, and deal process simulations (IPO, M&A).',
+    bullets: [
+      'Trading comps / transaction comps drills',
+      'Light DCF builds and sensitivity tables',
+      'Mini pitchbook or IM sprints that mirror deal flow',
+    ],
   },
   {
-    name: '리서치팀',
-    desc: '리서치팀은 Top-Down 방식으로 섹터를 분석해 Top pick을 발굴합니다. 선정된 종목에 대한 투자의견을 제시하고 상대적·절대적 가치평가로 목표주가를 제시합니다.'
+    id: 'research',
+    title: 'Research',
+    summary: 'Top-down thematics, company deep-dives, and concise investment memos.',
+    bullets: [
+      'Macro → sector → company frameworks',
+      'One-pagers and 5-minute pitch formats',
+      'Peer review to sharpen theses and risks',
+    ],
   },
   {
-    name: '파생상품팀',
-    desc: '파생상품팀은 매크로 분석으로 경제지표와 금리·통화정책을 해석하고, 스왑·옵션·선물 등 파생상품 이론과 가격결정 원리를 학습합니다. 실제 데이터를 활용해 이론을 적용하며 실무 감각을 높입니다.'
-  }
+    id: 'derivatives',
+    title: 'Derivatives',
+    summary: 'Macro framing, options and swaps pricing drills, and scenario playbooks.',
+    bullets: [
+      'Surface reading, term structure, and simple greeks labs',
+      'Case-based hedging examples and payoff sketches',
+      'Playbooks for different macro/vol regimes',
+    ],
+  },
 ];
 
-const features = [
-  { icon: CheckCircle2, title: '명확한 흐름', desc: '히어로 → 가치 제안 → 팀 소개 → 연락 CTA로 이어지는 단순 구조.' },
-  { icon: Shield, title: '집중된 정보', desc: '팀별 역할과 강점을 짧고 굵게 배치해 스크롤 부담을 줄였습니다.' },
-  { icon: Clock3, title: '빠른 이해', desc: '주요 포인트를 카드 형태로 나열해 방문자가 바로 이해하도록 설계.' }
-];
+const recruitingTabs = {
+  timeline: {
+    title: 'Timeline',
+    body: [
+      'Applications open soon.',
+      'Short case + conversation with current members.',
+      'Onboarding sprint with a mini project inside your track.',
+    ],
+  },
+  apply: {
+    title: 'Apply',
+    body: [
+      'Pick one track you want to grow in.',
+      'Share a brief: why HYFE, what you want to build or learn.',
+      'If you have a project, include a link (github, slides, doc).',
+    ],
+  },
+};
 
-const steps = [
-  { title: 'Introduce', text: '한눈에 들어오는 히어로와 핵심 문장' },
-  { title: 'Highlight', text: '가치 제안 3블록으로 요약' },
-  { title: 'Teams', text: '4개 팀의 세부 소개 카드' },
-  { title: 'Contact', text: '마지막 CTA로 연결' }
-];
+const useScrollToHash = () => {
+  const { hash } = useLocation();
+  React.useEffect(() => {
+    if (hash) {
+      const el = document.querySelector(hash);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [hash]);
+};
 
-function App() {
-  return (
-    <div className="min-h-screen bg-blue-50 text-navy-900">
-      <header className="bg-white shadow-sm">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="h-10 w-10 rounded-xl bg-navy-800 text-white flex items-center justify-center font-semibold">
-              HY
-            </div>
-            <div>
-              <p className="text-sm text-navy-700">Hanyang Financial Engineering</p>
-              <h1 className="text-lg font-semibold">HYFE</h1>
-            </div>
-          </div>
-          <button className="inline-flex items-center space-x-2 px-4 py-2 bg-navy-800 text-white rounded-lg hover:bg-navy-900 transition">
-            <span>문의하기</span>
-            <ArrowRight size={18} />
-          </button>
+const Layout = ({ children }) => (
+  <>
+    <style>{`
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap');
+
+      :root {
+        --bg: #e8f3ff;
+        --ink: #0f172a;
+        --muted: #4b5563;
+        --accent: #1d4ed8;
+        --card: rgba(255, 255, 255, 0.82);
+        --border: rgba(15, 23, 42, 0.08);
+      }
+
+      html { scroll-behavior: smooth; }
+      html, body, #root { height: 100%; margin: 0; }
+
+      body {
+        font-family: 'Inter', 'Noto Sans KR', system-ui, -apple-system, sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      .page {
+        min-height: 100vh;
+        background: radial-gradient(circle at 20% 20%, rgba(255,255,255,0.7), transparent 35%),
+                    radial-gradient(circle at 80% 0%, rgba(255,255,255,0.55), transparent 32%),
+                    var(--bg);
+      }
+
+      .container {
+        width: min(1200px, 92vw);
+        margin: 0 auto;
+      }
+
+      header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
+        background: rgba(232, 243, 255, 0.4);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+      }
+
+      .nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 18px 0;
+      }
+
+      .logo {
+        font-weight: 700;
+        letter-spacing: 0.02em;
+      }
+
+      nav ul {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        font-weight: 500;
+      }
+
+      nav a {
+        padding: 8px 10px;
+        border-radius: 999px;
+        transition: 150ms ease;
+        color: var(--ink);
+      }
+
+      nav a:hover {
+        opacity: 0.7;
+        text-decoration: underline;
+        text-decoration-thickness: 2px;
+      }
+
+      main { padding-top: 86px; }
+
+      .hero {
+        min-height: calc(100vh - 86px);
+        display: grid;
+        place-items: center;
+        position: relative;
+        text-align: center;
+        padding: 80px 0 100px;
+        overflow: hidden;
+      }
+
+      .hero::before,
+      .hero::after {
+        content: '';
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(60px);
+        opacity: 0.6;
+        z-index: 0;
+      }
+
+      .hero::before {
+        width: 340px; height: 340px;
+        background: #c7e1ff;
+        top: 12%; left: 14%;
+      }
+
+      .hero::after {
+        width: 420px; height: 420px;
+        background: #dcecff;
+        bottom: -6%; right: 18%;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 760px;
+        margin: 0 auto;
+        display: grid;
+        gap: 24px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        font-size: 14px;
+        color: var(--muted);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      }
+
+      .title {
+        font-size: clamp(42px, 6vw, 64px);
+        line-height: 1.05;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .subtitle {
+        font-size: 18px;
+        color: var(--muted);
+        margin: 0 auto;
+        max-width: 640px;
+        line-height: 1.5;
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 12px 22px;
+        border-radius: 999px;
+        border: 1.8px solid var(--ink);
+        background: transparent;
+        color: var(--ink);
+        font-weight: 600;
+        cursor: pointer;
+        transition: 160ms ease;
+        font-size: 15px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .btn.primary {
+        background: var(--ink);
+        color: #fff;
+        border-color: var(--ink);
+      }
+
+      .btn:hover { transform: translateY(-2px); opacity: 0.92; }
+
+      section { padding: 80px 0; }
+
+      .section-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        flex-wrap: wrap;
+      }
+
+      .section-title {
+        margin: 0;
+        font-size: 28px;
+        letter-spacing: -0.01em;
+      }
+
+      .section-sub {
+        color: var(--muted);
+        margin: 6px 0 0;
+        max-width: 520px;
+        line-height: 1.5;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+      }
+
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+      }
+
+      button.card, a.card {
+        border: none;
+        width: 100%;
+        text-align: left;
+        color: inherit;
+        cursor: pointer;
+      }
+
+      .card h4 {
+        margin: 0 0 8px;
+        font-size: 18px;
+      }
+
+      .card p {
+        margin: 0;
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 15px;
+      }
+
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(29, 78, 216, 0.08);
+        color: #1d4ed8;
+        font-weight: 600;
+        font-size: 13px;
+        margin-bottom: 14px;
+      }
+
+      .people-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+
+      .person {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        display: grid;
+        gap: 8px;
+      }
+
+      .person strong { font-size: 16px; }
+      .person span { color: var(--muted); font-size: 14px; }
+
+      footer {
+        padding: 40px 0 60px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      @media (max-width: 900px) {
+        .nav { padding: 14px 0; }
+        nav ul { gap: 14px; }
+        .section-head { align-items: flex-start; }
+      }
+
+      @media (max-width: 640px) {
+        .nav { flex-direction: column; align-items: flex-start; gap: 10px; }
+        nav ul { width: 100%; justify-content: space-between; }
+        .hero { padding: 70px 0 90px; }
+        section { padding: 64px 0; }
+      }
+
+      .detail-card {
+        margin-top: 18px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.04);
+      }
+
+      .detail-card ul {
+        margin: 12px 0 0;
+        padding-left: 18px;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .option-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+        margin-top: 12px;
+      }
+
+      .option-btn {
+        padding: 18px 20px;
+        border-radius: 16px;
+        border: 1.5px solid var(--border);
+        background: var(--card);
+        color: var(--ink);
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 14px 38px rgba(0,0,0,0.06);
+        transition: 140ms ease;
+        display: block;
+      }
+
+      .option-btn:hover { transform: translateY(-3px); }
+
+      .option-btn.active {
+        border-color: var(--ink);
+        background: #fff;
+        box-shadow: 0 18px 46px rgba(0,0,0,0.08);
+      }
+
+      .option-title {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 6px;
+      }
+
+      .option-desc {
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.5;
+      }
+    `}</style>
+
+    <div className="page">
+      <header>
+        <div className="container nav">
+          <Link to="/" className="logo">HYFE</Link>
+          <nav>
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><a href="/#about">About us</a></li>
+              <li><Link to="/activities">Activities</Link></li>
+              <li><a href="/#people">People</a></li>
+              <li><Link to="/recruiting/timeline">Recruiting</Link></li>
+            </ul>
+          </nav>
         </div>
       </header>
 
-      <main className="max-w-6xl mx-auto px-6 py-12 space-y-16">
-        {/* Hero */}
-        <section className="grid gap-10 lg:grid-cols-2 items-center">
-          <div className="space-y-6">
-            <div className="inline-flex items-center space-x-2 bg-white text-navy-800 rounded-full px-3 py-1 shadow-sm">
-              <Sparkles size={16} />
-              <span className="text-sm font-medium">Quant · IB · Research · Derivatives</span>
-            </div>
-            <h2 className="text-4xl lg:text-5xl font-bold leading-tight">
-              실전형 금융공학팀, 4개 트랙으로 성장합니다.
-            </h2>
-            <p className="text-lg text-navy-700">
-              snusmic.com처럼 단순하고 깔끔한 배치를 유지하면서, HYFE의 4개 팀 소개와 핵심 가치를 한 페이지에 담았습니다.
-            </p>
-            <div className="flex flex-wrap gap-3">
-              <button className="px-5 py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-900 transition inline-flex items-center space-x-2">
-                <span>지원/문의</span>
-                <ArrowRight size={18} />
-              </button>
-              <button className="px-5 py-3 bg-white text-navy-900 rounded-lg border border-navy-100 hover:border-navy-300 transition">
-                더 알아보기
-              </button>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div className="bg-white rounded-lg p-4 border border-navy-100">
-                <p className="text-sm font-semibold text-navy-700">실무 중심</p>
-                <p className="text-sm text-navy-600">시장 분석과 모델링을 실전 프로젝트로 검증</p>
-              </div>
-              <div className="bg-white rounded-lg p-4 border border-navy-100">
-                <p className="text-sm font-semibold text-navy-700">팀 기반 성장</p>
-                <p className="text-sm text-navy-600">4개 팀이 서로 다른 역량을 보완</p>
-              </div>
-              <div className="bg-white rounded-lg p-4 border border-navy-100">
-                <p className="text-sm font-semibold text-navy-700">커리어 가속</p>
-                <p className="text-sm text-navy-600">IB·퀀트·리서치·파생 실무 감각 확보</p>
-              </div>
-            </div>
-          </div>
-          <div className="bg-white rounded-2xl shadow-lg border border-navy-100 p-6 space-y-4">
-            <div className="space-y-1">
-              <p className="text-sm text-navy-600">간단 소개 카드</p>
-              <h3 className="text-2xl font-semibold">HYFE 한눈에 보기</h3>
-            </div>
-            <div className="space-y-3">
-              <div className="rounded-lg border border-navy-100 p-3">
-                <p className="text-sm text-navy-600">팀 구성</p>
-                <p className="text-base font-semibold">퀀트 · IB · 리서치 · 파생상품</p>
-              </div>
-              <div className="rounded-lg border border-navy-100 p-3">
-                <p className="text-sm text-navy-600">활동</p>
-                <p className="text-base font-semibold">세션 · 프로젝트 · 실습 · 밸류에이션</p>
-              </div>
-              <div className="rounded-lg border border-navy-100 p-3">
-                <p className="text-sm text-navy-600">결과물</p>
-                <p className="text-base font-semibold">전략 리포트 · Pitch Book · IM · 백테스트</p>
-              </div>
-              <button className="w-full py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-900 transition inline-flex items-center justify-center space-x-2">
-                <span>소개 자료 받기</span>
-                <ArrowRight size={18} />
-              </button>
-            </div>
-            <p className="text-sm text-navy-600">
-              세부 내용은 추후 제공할 자료로 교체하세요.
-            </p>
-          </div>
-        </section>
+      <main>{children}</main>
 
-        {/* Features */}
-        <section className="space-y-6">
-          <h3 className="text-2xl font-bold">페이지 핵심 포인트</h3>
-          <div className="grid gap-6 md:grid-cols-3">
-            {features.map(({ icon: Icon, title, desc }) => (
-              <div key={title} className="bg-white rounded-xl p-5 shadow-sm border border-navy-100 space-y-3">
-                <div className="h-10 w-10 rounded-lg bg-navy-50 text-navy-800 flex items-center justify-center">
-                  <Icon size={20} />
-                </div>
-                <h4 className="text-lg font-semibold">{title}</h4>
-                <p className="text-sm text-navy-700">{desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Teams */}
-        <section className="space-y-6">
-          <div className="flex items-center space-x-3">
-            <LayoutGrid className="text-navy-800" size={20} />
-            <h3 className="text-2xl font-bold">4개 팀 소개</h3>
-          </div>
-          <div className="grid gap-6 md:grid-cols-2">
-            {teams.map((team) => (
-              <div key={team.name} className="bg-white border border-navy-100 rounded-xl p-5 shadow-sm space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-xl font-semibold">{team.name}</h4>
-                  <span className="text-sm text-navy-600">HYFE</span>
-                </div>
-                <p className="text-sm text-navy-700 leading-relaxed">{team.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Process */}
-        <section className="bg-white border border-navy-100 rounded-2xl p-8 space-y-6 shadow-sm">
-          <div className="flex items-center space-x-3">
-            <Shield className="text-navy-800" size={20} />
-            <h3 className="text-2xl font-bold">페이지 흐름</h3>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            {steps.map((step) => (
-              <div key={step.title} className="rounded-xl border border-navy-100 p-4 flex space-x-3">
-                <div className="h-9 w-9 rounded-lg bg-navy-50 text-navy-800 flex items-center justify-center font-semibold">
-                  {step.title}
-                </div>
-                <div>
-                  <p className="font-semibold">{step.title}</p>
-                  <p className="text-sm text-navy-700">{step.text}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Secondary CTA */}
-        <section className="bg-navy-900 text-white rounded-2xl p-10 flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4">
-          <div className="space-y-2">
-            <p className="uppercase tracking-wide text-xs text-navy-200">Contact</p>
-            <h3 className="text-3xl font-semibold">HYFE와 함께할 준비가 되셨나요?</h3>
-            <p className="text-navy-100">팀별 상세 자료와 세션 일정은 문의 시 공유드립니다.</p>
-          </div>
-          <div className="flex space-x-3">
-            <button className="px-5 py-3 bg-white text-navy-900 rounded-lg font-semibold hover:bg-navy-50 transition inline-flex items-center space-x-2">
-              <span>문의하기</span>
-              <ArrowRight size={18} />
-            </button>
-            <button className="px-5 py-3 bg-navy-800 text-white rounded-lg hover:bg-navy-700 transition">
-              소개서 받기
-            </button>
-          </div>
-        </section>
-      </main>
-
-      <footer className="py-10 text-center text-navy-700 text-sm">
-        <p>레이아웃 영감: snusmic.com 스타일. 텍스트는 추후 제공 내용으로 교체하세요.</p>
+      <footer>
+        <div className="container">
+          HYFE (HanYang Financial Engineering) — built by students who learn by doing.
+        </div>
       </footer>
     </div>
+  </>
+);
+
+const LandingPage = () => {
+  useScrollToHash();
+  return (
+    <>
+      <section id="home" className="hero">
+        <div className="hero-content">
+          <div className="eyebrow">HanYang Financial Engineering</div>
+          <h1 className="title">HanYang Financial Engineering</h1>
+          <p className="subtitle">
+            Your gateway to quantitative finance, investment banking, research, and derivatives — built by students who want to learn by doing.
+          </p>
+          <div className="hero-actions">
+            <a className="btn primary" href="#about">Who we are</a>
+            <Link className="btn" to="/recruiting/timeline">25-1 Recruiting</Link>
+          </div>
+        </div>
+      </section>
+
+      <section id="about">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <h2 className="section-title">About us</h2>
+              <p className="section-sub">
+                HYFE is the student-led HanYang Financial Engineering club focused on rigorous practice, real market insight, and collaborative research.
+              </p>
+            </div>
+            <span className="pill">Quant · IB · Research · Derivatives</span>
+          </div>
+          <div className="card-grid">
+            <div className="card">
+              <h4>Hands-on learning</h4>
+              <p>We learn by building models, pitching ideas, and stress-testing strategies together.</p>
+            </div>
+            <div className="card">
+              <h4>Team-first culture</h4>
+              <p>Small squads own projects end-to-end with mentoring from senior members and alumni.</p>
+            </div>
+            <div className="card">
+              <h4>Practical outcomes</h4>
+              <p>Reports, backtests, pitchbooks, and research briefs that mirror real-world work.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="activities">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <h2 className="section-title">Activities</h2>
+              <p className="section-sub">
+                Weekly sessions combine theory with deliverables — from idea scouting to presentation decks.
+              </p>
+            </div>
+          </div>
+          <div className="card-grid">
+            {activities.map((item) => (
+              <Link key={item.id} to={`/activities/${item.id}`} className="card" aria-label={`${item.title} details`}>
+                <h4>{item.title}</h4>
+                <p>{item.summary}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section id="people">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <h2 className="section-title">People</h2>
+              <p className="section-sub">
+                A mix of finance, engineering, and data enthusiasts who enjoy building together.
+              </p>
+            </div>
+          </div>
+          <div className="people-grid">
+            <div className="person">
+              <strong>Leads</strong>
+              <span>Guide strategy, set curriculum, and support project delivery.</span>
+            </div>
+            <div className="person">
+              <strong>Analysts</strong>
+              <span>Drive research, modeling, and presentations inside each track.</span>
+            </div>
+            <div className="person">
+              <strong>New members</strong>
+              <span>Learn the basics, contribute to live projects, and ship early work.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="recruiting">
+        <div className="container">
+          <div className="section-head">
+            <div>
+              <h2 className="section-title">25-1 Recruiting</h2>
+              <p className="section-sub">
+                We look for curious builders ready to learn fast. Light prep, clear expectations, and a team that cares.
+              </p>
+            </div>
+            <a className="btn primary" href="#home">Back to top</a>
+          </div>
+          <div className="option-grid">
+            <Link to="/recruiting/timeline" className="option-btn">
+              <div className="option-title">Timeline</div>
+              <div className="option-desc">Key dates, short case, and onboarding steps.</div>
+            </Link>
+            <Link to="/recruiting/apply" className="option-btn">
+              <div className="option-title">Apply</div>
+              <div className="option-desc">What to submit and where to send it.</div>
+            </Link>
+          </div>
+        </div>
+      </section>
+    </>
   );
-}
+};
+
+const ActivitiesIndex = () => (
+  <div className="container">
+    <div className="section-head" style={{ marginTop: 32 }}>
+      <div>
+        <h2 className="section-title">Activities</h2>
+        <p className="section-sub">Choose a track to see what we do inside each team.</p>
+      </div>
+      <Link className="btn" to="/">Back home</Link>
+    </div>
+    <div className="card-grid">
+      {activities.map((item) => (
+        <Link key={item.id} to={`/activities/${item.id}`} className="card" aria-label={`${item.title} details`}>
+          <h4>{item.title}</h4>
+          <p>{item.summary}</p>
+        </Link>
+      ))}
+    </div>
+  </div>
+);
+
+const ActivityDetail = () => {
+  const { id } = useParams();
+  const activity = activities.find((a) => a.id === id);
+
+  if (!activity) {
+    return (
+      <div className="container" style={{ padding: '80px 0' }}>
+        <h2 className="section-title">Not found</h2>
+        <p className="section-sub">The activity you’re looking for does not exist.</p>
+        <div style={{ marginTop: 16, display: 'flex', gap: 10 }}>
+          <Link className="btn" to="/activities">Back to Activities</Link>
+          <Link className="btn primary" to="/">Home</Link>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="container" style={{ padding: '80px 0' }}>
+      <div className="section-head" style={{ marginBottom: 16 }}>
+        <div>
+          <h2 className="section-title">{activity.title}</h2>
+          <p className="section-sub">{activity.summary}</p>
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <Link className="btn" to="/activities">Back to Activities</Link>
+          <Link className="btn primary" to="/">Home</Link>
+        </div>
+      </div>
+      <div className="detail-card">
+        <ul>
+          {activity.bullets.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+const RecruitingPage = ({ mode }) => {
+  const tab = recruitingTabs[mode] || recruitingTabs.timeline;
+  return (
+    <div className="container" style={{ padding: '80px 0' }}>
+      <div className="section-head" style={{ marginBottom: 16 }}>
+        <div>
+          <h2 className="section-title">25-1 Recruiting — {tab.title}</h2>
+          <p className="section-sub">
+            We look for curious builders ready to learn fast. Light prep, clear expectations, and a team that cares.
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <Link className={`option-btn ${mode === 'timeline' ? 'active' : ''}`} to="/recruiting/timeline">
+            <div className="option-title">Timeline</div>
+            <div className="option-desc">Key dates and onboarding steps.</div>
+          </Link>
+          <Link className={`option-btn ${mode === 'apply' ? 'active' : ''}`} to="/recruiting/apply">
+            <div className="option-title">Apply</div>
+            <div className="option-desc">What to submit and where to send it.</div>
+          </Link>
+          <Link className="btn primary" to="/">Home</Link>
+        </div>
+      </div>
+      <div className="detail-card">
+        <ul>
+          {tab.body.map((line) => (
+            <li key={line}>{line}</li>
+          ))}
+        </ul>
+        {mode === 'apply' && (
+          <div style={{ marginTop: 14, display: 'inline-flex', gap: 12, flexWrap: 'wrap' }}>
+            <a className="btn primary" href="https://example.com/apply" target="_blank" rel="noreferrer">
+              Go to application
+            </a>
+            <Link className="btn" to="/recruiting/timeline">See timeline</Link>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const App = () => (
+  <BrowserRouter>
+    <Layout>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/activities" element={<ActivitiesIndex />} />
+        <Route path="/activities/:id" element={<ActivityDetail />} />
+        <Route path="/recruiting/timeline" element={<RecruitingPage mode="timeline" />} />
+        <Route path="/recruiting/apply" element={<RecruitingPage mode="apply" />} />
+        <Route path="*" element={<LandingPage />} />
+      </Routes>
+    </Layout>
+  </BrowserRouter>
+);
 
 export default App;
