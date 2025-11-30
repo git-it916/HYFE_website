@@ -183,7 +183,7 @@ const Layout = ({ children }) => (
       .hero-content {
         position: relative;
         z-index: 1;
-        max-width: 760px;
+        max-width: 980px;
         margin: 0 auto;
         display: grid;
         gap: 24px;
@@ -207,6 +207,7 @@ const Layout = ({ children }) => (
         line-height: 1.05;
         margin: 0;
         letter-spacing: -0.02em;
+        white-space: nowrap;
       }
 
       .subtitle {
@@ -355,6 +356,7 @@ const Layout = ({ children }) => (
         nav ul { width: 100%; justify-content: space-between; }
         .hero { padding: 70px 0 90px; }
         section { padding: 64px 0; }
+        .title { white-space: normal; }
       }
 
       .detail-card {
@@ -447,10 +449,9 @@ const LandingPage = () => {
     <>
       <section id="home" className="hero">
         <div className="hero-content">
-          <div className="eyebrow">HanYang Financial Engineering</div>
           <h1 className="title">HanYang Financial Engineering</h1>
           <p className="subtitle">
-            Your gateway to quantitative finance, investment banking, research, and derivatives ? built by students who want to learn by doing.
+            Where Theory Becomes Alpha
           </p>
           <div className="hero-actions">
             <Link className="btn primary" to="/about">Who we are</Link>
@@ -647,7 +648,7 @@ const RecruitingPage = ({ mode }) => {
         </ul>
         {mode === 'apply' && (
           <div style={{ marginTop: 14, display: 'inline-flex', gap: 12, flexWrap: 'wrap' }}>
-            <a className="btn primary" href="https://example.com/apply" target="_blank" rel="noreferrer">
+            <a className="btn primary" href="https://cafe.naver.com/f-e/cafes/28919085/menus/1?viewType=L" target="_blank" rel="noreferrer">
               Go to application
             </a>
             <Link className="btn" to="/recruiting/timeline">See timeline</Link>
