@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link, useParams, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
 
 const activities = [
   {
@@ -61,18 +61,6 @@ const recruitingTabs = {
       'If you have a project, include a link (github, slides, doc).',
     ],
   },
-};
-
-const useScrollToHash = () => {
-  const { hash } = useLocation();
-  React.useEffect(() => {
-    if (hash) {
-      const el = document.querySelector(hash);
-      if (el) el.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  }, [hash]);
 };
 
 const Layout = ({ children }) => (
@@ -433,9 +421,9 @@ const Layout = ({ children }) => (
           <nav>
             <ul>
               <li><Link to="/">Home</Link></li>
-              <li><a href="/#about">About us</a></li>
+              <li><Link to="/about">About us</Link></li>
               <li><Link to="/activities">Activities</Link></li>
-              <li><a href="/#people">People</a></li>
+              <li><Link to="/people">People</Link></li>
               <li><Link to="/recruiting/timeline">Recruiting</Link></li>
             </ul>
           </nav>
@@ -453,8 +441,8 @@ const Layout = ({ children }) => (
   </>
 );
 
+
 const LandingPage = () => {
-  useScrollToHash();
   return (
     <>
       <section id="home" className="hero">
@@ -462,110 +450,41 @@ const LandingPage = () => {
           <div className="eyebrow">HanYang Financial Engineering</div>
           <h1 className="title">HanYang Financial Engineering</h1>
           <p className="subtitle">
-            Your gateway to quantitative finance, investment banking, research, and derivatives — built by students who want to learn by doing.
+            Your gateway to quantitative finance, investment banking, research, and derivatives ? built by students who want to learn by doing.
           </p>
           <div className="hero-actions">
-            <a className="btn primary" href="#about">Who we are</a>
+            <Link className="btn primary" to="/about">Who we are</Link>
             <Link className="btn" to="/recruiting/timeline">25-1 Recruiting</Link>
           </div>
         </div>
       </section>
 
-      <section id="about">
+      <section>
         <div className="container">
           <div className="section-head">
             <div>
-              <h2 className="section-title">About us</h2>
+              <h2 className="section-title">Explore HYFE</h2>
               <p className="section-sub">
-                HYFE is the student-led HanYang Financial Engineering club focused on rigorous practice, real market insight, and collaborative research.
-              </p>
-            </div>
-            <span className="pill">Quant · IB · Research · Derivatives</span>
-          </div>
-          <div className="card-grid">
-            <div className="card">
-              <h4>Hands-on learning</h4>
-              <p>We learn by building models, pitching ideas, and stress-testing strategies together.</p>
-            </div>
-            <div className="card">
-              <h4>Team-first culture</h4>
-              <p>Small squads own projects end-to-end with mentoring from senior members and alumni.</p>
-            </div>
-            <div className="card">
-              <h4>Practical outcomes</h4>
-              <p>Reports, backtests, pitchbooks, and research briefs that mirror real-world work.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="activities">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <h2 className="section-title">Activities</h2>
-              <p className="section-sub">
-                Weekly sessions combine theory with deliverables — from idea scouting to presentation decks.
+                Jump straight to the pages for our story, team structure, activities, and recruiting process.
               </p>
             </div>
           </div>
           <div className="card-grid">
-            {activities.map((item) => (
-              <Link key={item.id} to={`/activities/${item.id}`} className="card" aria-label={`${item.title} details`}>
-                <h4>{item.title}</h4>
-                <p>{item.summary}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="people">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <h2 className="section-title">People</h2>
-              <p className="section-sub">
-                A mix of finance, engineering, and data enthusiasts who enjoy building together.
-              </p>
-            </div>
-          </div>
-          <div className="people-grid">
-            <div className="person">
-              <strong>Leads</strong>
-              <span>Guide strategy, set curriculum, and support project delivery.</span>
-            </div>
-            <div className="person">
-              <strong>Analysts</strong>
-              <span>Drive research, modeling, and presentations inside each track.</span>
-            </div>
-            <div className="person">
-              <strong>New members</strong>
-              <span>Learn the basics, contribute to live projects, and ship early work.</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="recruiting">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <h2 className="section-title">25-1 Recruiting</h2>
-              <p className="section-sub">
-                We look for curious builders ready to learn fast. Light prep, clear expectations, and a team that cares.
-              </p>
-            </div>
-            <a className="btn primary" href="#home">Back to top</a>
-          </div>
-          <div className="option-grid">
-            <Link to="/recruiting/timeline" className="option-btn">
-              <div className="option-title">Timeline</div>
-              <div className="option-desc">Key dates, short case, and onboarding steps.</div>
+            <Link className="card" to="/about">
+              <h4>About us</h4>
+              <p>Who we are, how we learn, and what makes HYFE tick.</p>
             </Link>
-            <Link to="/recruiting/apply" className="option-btn">
-              <div className="option-title">Apply</div>
-              <div className="option-desc">What to submit and where to send it.</div>
+            <Link className="card" to="/activities">
+              <h4>Activities</h4>
+              <p>See all tracks (Quant, IB, Research, Derivatives) and their deliverables.</p>
+            </Link>
+            <Link className="card" to="/people">
+              <h4>People</h4>
+              <p>Meet the leads, analysts, and new members who build together.</p>
+            </Link>
+            <Link className="card" to="/recruiting/timeline">
+              <h4>Recruiting</h4>
+              <p>Check the timeline or apply directly for the upcoming cohort.</p>
             </Link>
           </div>
         </div>
@@ -573,6 +492,69 @@ const LandingPage = () => {
     </>
   );
 };
+
+const AboutPage = () => (
+  <div className="container" style={{ padding: '80px 0' }}>
+    <div className="section-head" style={{ marginBottom: 16 }}>
+      <div>
+        <h2 className="section-title">About us</h2>
+        <p className="section-sub">
+          HYFE is the student-led HanYang Financial Engineering club focused on rigorous practice, real market insight, and collaborative research.
+        </p>
+      </div>
+      <span className="pill">Quant · IB · Research · Derivatives</span>
+    </div>
+    <div className="card-grid">
+      <div className="card">
+        <h4>Hands-on learning</h4>
+        <p>We learn by building models, pitching ideas, and stress-testing strategies together.</p>
+      </div>
+      <div className="card">
+        <h4>Team-first culture</h4>
+        <p>Small squads own projects end-to-end with mentoring from senior members and alumni.</p>
+      </div>
+      <div className="card">
+        <h4>Practical outcomes</h4>
+        <p>Reports, backtests, pitchbooks, and research briefs that mirror real-world work.</p>
+      </div>
+    </div>
+    <div style={{ marginTop: 18, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <Link className="btn" to="/">Home</Link>
+      <Link className="btn" to="/activities">See Activities</Link>
+    </div>
+  </div>
+);
+
+const PeoplePage = () => (
+  <div className="container" style={{ padding: '80px 0' }}>
+    <div className="section-head" style={{ marginBottom: 16 }}>
+      <div>
+        <h2 className="section-title">People</h2>
+        <p className="section-sub">
+          A mix of finance, engineering, and data enthusiasts who enjoy building together.
+        </p>
+      </div>
+    </div>
+    <div className="people-grid">
+      <div className="person">
+        <strong>Leads</strong>
+        <span>Guide strategy, set curriculum, and support project delivery.</span>
+      </div>
+      <div className="person">
+        <strong>Analysts</strong>
+        <span>Drive research, modeling, and presentations inside each track.</span>
+      </div>
+      <div className="person">
+        <strong>New members</strong>
+        <span>Learn the basics, contribute to live projects, and ship early work.</span>
+      </div>
+    </div>
+    <div style={{ marginTop: 18, display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+      <Link className="btn" to="/">Home</Link>
+      <Link className="btn" to="/recruiting/timeline">Recruiting</Link>
+    </div>
+  </div>
+);
 
 const ActivitiesIndex = () => (
   <div className="container">
@@ -681,6 +663,8 @@ const App = () => (
     <Layout>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/people" element={<PeoplePage />} />
         <Route path="/activities" element={<ActivitiesIndex />} />
         <Route path="/activities/:id" element={<ActivityDetail />} />
         <Route path="/recruiting/timeline" element={<RecruitingPage mode="timeline" />} />
