@@ -1,0 +1,9 @@
+# Copy this file to terraform.tfvars and fill in your values
+
+aws_region          = "ap-northeast-2"
+app_name            = "hyfe-website"
+environment         = "production"
+ecr_repository_name = "hyfe-website"
+ec2_instance_type   = "t3.small"
+ec2_key_pair_name   = "your-key-pair-name"
+ec2_instance_name   = "hyfe-website-server"
