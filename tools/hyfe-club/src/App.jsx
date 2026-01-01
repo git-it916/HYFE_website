@@ -256,10 +256,10 @@ const Layout = ({ children }) => (
 
       .title {
         font-size: clamp(44px, 7vw, 72px);
-        line-height: 1;
+        line-height: 1.5;
         margin: 0;
         font-weight: 800;
-        letter-spacing: 0.02em;
+        letter-spacing: -0.03em;
         background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
