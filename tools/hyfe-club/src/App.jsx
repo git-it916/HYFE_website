@@ -6,52 +6,52 @@ const activities = [
     id: 'ibd',
     title: 'IBD Team',
     tag: 'Investment Banking',
-    summary: 'Master deal execution through industry analysis, valuation modeling, and pitchbook creation.',
-    description: 'Through in-depth industry and company analysis, we identify core investment themes and master valuation techniques including Trading Comps and DCF. Members gain hands-on experience crafting IPO Pitch Books and M&A Information Memorandums, building a comprehensive understanding of the entire deal process.',
+    summary: '산업 분석, 밸류에이션 모델링, 피치북 제작을 통해 딜 실행 역량을 마스터합니다.',
+    description: '심층적인 산업 및 기업 분석을 통해 핵심 투자 포인트를 발굴하고, Trading Comps와 DCF를 포함한 밸류에이션 기법을 습득합니다. IPO Pitch Book과 M&A IM 작성 실습을 통해 딜 프로세스 전반에 대한 이해를 구축합니다.',
     bullets: [
-      'Industry & company deep-dive analysis to extract key investment points',
-      'Trading Comps and DCF-based valuation methodology',
-      'IPO Pitch Book and M&A IM preparation and presentation',
-      'End-to-end deal process simulation and execution'
+      '산업 및 기업 심층 분석을 통한 핵심 투자 포인트 도출',
+      'Trading Comps와 DCF 기반 밸류에이션 방법론',
+      'IPO Pitch Book 및 M&A IM 준비 및 발표',
+      '엔드투엔드 딜 프로세스 시뮬레이션 및 실행'
     ],
   },
   {
     id: 'research',
     title: 'Research Team',
     tag: 'Equity Research',
-    summary: 'Develop conviction through top-down analysis, sector screening, and rigorous valuation frameworks.',
-    description: 'Employing a top-down approach, we build comprehensive sector understanding to uncover top-pick opportunities. Members craft compelling investment theses supported by both relative and absolute valuation methods, culminating in defensible price targets and actionable recommendations.',
+    summary: '탑다운 분석, 섹터 스크리닝, 엄격한 밸류에이션 프레임워크를 통해 투자 확신을 개발합니다.',
+    description: '탑다운 접근법을 통해 포괄적인 섹터 이해를 구축하고 탑픽 기회를 발굴합니다. 상대가치 및 절대가치 밸류에이션 방법론으로 뒷받침되는 투자 논리를 작성하고, 방어 가능한 목표주가와 실행 가능한 추천의견을 도출합니다.',
     bullets: [
-      'Top-down framework: macro → sector → company stock selection',
-      'Investment thesis development with clear risk/reward assessment',
-      'Relative and absolute valuation techniques (Comps, DCF, DDM)',
-      'Target price derivation with sensitivity analysis and peer benchmarking'
+      '탑다운 프레임워크: 거시 → 섹터 → 개별 종목 선정',
+      '명확한 위험/보상 평가를 포함한 투자 논리 개발',
+      '상대가치 및 절대가치 밸류에이션 기법 (Comps, DCF, DDM)',
+      '민감도 분석 및 동종업계 벤치마킹을 통한 목표주가 도출'
     ],
   },
   {
     id: 'quant',
     title: 'Quant Team',
     tag: 'Quantitative Finance',
-    summary: 'Build systematic strategies through algorithmic alpha discovery and portfolio optimization.',
-    description: 'Operating across two specialized tracks—Algorithmic Quant and Portfolio Quant—we explore market microstructure for alpha generation and apply modern portfolio theory for strategy construction. Members gain practical experience in signal research, backtesting, and risk management.',
+    summary: '알고리즘 알파 발굴과 포트폴리오 최적화를 통해 시스템적 전략을 구축합니다.',
+    description: 'Algorithmic Quant와 Portfolio Quant 두 개의 전문 트랙을 운영하며, 마켓 마이크로스트럭처를 탐구하여 알파를 생성하고 현대 포트폴리오 이론을 적용하여 전략을 구축합니다. 시그널 리서치, 백테스팅, 리스크 관리에 대한 실무 경험을 쌓습니다.',
     bullets: [
-      'Algorithmic Quant: Market microstructure analysis and alpha signal discovery',
-      'Portfolio Quant: Portfolio optimization and systematic strategy construction',
-      'Python-based backtesting with risk and turnover controls',
-      'Factor research, signal validation, and performance attribution'
+      'Algorithmic Quant: 마켓 마이크로스트럭처 분석 및 알파 시그널 발굴',
+      'Portfolio Quant: 포트폴리오 최적화 및 시스템적 전략 구축',
+      '리스크 및 회전율 통제가 포함된 Python 기반 백테스팅',
+      '팩터 리서치, 시그널 검증, 성과 기여도 분석'
     ],
   },
   {
     id: 'derivatives',
     title: 'Derivatives Team',
     tag: 'Fixed Income & Derivatives',
-    summary: 'Navigate macro regimes and derivative pricing through policy analysis and structured products.',
-    description: 'Building from macro analysis of economic indicators and monetary policy, we develop expertise in swaps, options, and futures pricing. Members apply theoretical frameworks to real market data, sharpening their ability to structure and hedge complex derivative positions.',
+    summary: '정책 분석과 구조화 상품을 통해 거시 환경과 파생상품 가격결정을 이해합니다.',
+    description: '경제 지표 및 통화정책에 대한 거시 분석을 기반으로 스왑, 옵션, 선물 가격결정에 대한 전문성을 개발합니다. 이론적 프레임워크를 실제 시장 데이터에 적용하여 복잡한 파생상품 포지션을 구조화하고 헤지하는 능력을 키웁니다.',
     bullets: [
-      'Macro analysis: interpreting economic data, interest rates, and central bank policy',
-      'Derivatives fundamentals: swaps, options, futures pricing and greeks',
-      'Real-world application: pricing models with live market data',
-      'Scenario analysis and hedging strategies across volatility regimes'
+      '거시 분석: 경제 데이터, 금리, 중앙은행 정책 해석',
+      '파생상품 기초: 스왑, 옵션, 선물 가격결정 및 그릭스',
+      '실무 적용: 실시간 시장 데이터를 활용한 가격결정 모델',
+      '변동성 국면 전반에 걸친 시나리오 분석 및 헤징 전략'
     ],
   },
 ];
@@ -60,17 +60,17 @@ const curriculumStages = [
   {
     level: 'Lv.1',
     title: 'Education',
-    description: 'Core concepts, industry frameworks, and foundational tools through lectures and readings.'
+    description: '강의와 리딩을 통해 핵심 개념, 산업 프레임워크, 기초 도구를 학습합니다.'
   },
   {
     level: 'Lv.2',
     title: 'Practice',
-    description: 'Hands-on drills with real data: valuation models, backtests, macro analysis, and pitch formats.'
+    description: '실제 데이터를 활용한 실습: 밸류에이션 모델, 백테스트, 거시 분석, 피치 형식 등을 다룹니다.'
   },
   {
     level: 'Lv.3',
     title: 'Project',
-    description: 'Team-driven deliverables mirroring real-world work: research reports, pitchbooks, and strategy teardowns.'
+    description: '실무를 반영한 팀 주도 결과물: 리서치 리포트, 피치북, 전략 분석 등을 작성합니다.'
   },
 ];
 
@@ -83,19 +83,19 @@ const awards = [
 const idealCandidates = [
   {
     title: 'Passion over pedigree',
-    description: 'We value curiosity and the drive to learn far more than prior knowledge or resume credentials.'
+    description: '사전 지식이나 스펙보다 호기심과 배우려는 의지를 더 중요하게 생각합니다.'
   },
   {
     title: 'Ownership mindset',
-    description: 'Take initiative, see projects through, and hold yourself accountable to the team and deliverables.'
+    description: '주도성을 가지고 프로젝트를 완수하며, 팀과 결과물에 대한 책임감을 가집니다.'
   },
   {
     title: 'Collaborative spirit',
-    description: 'We grow together through peer review, mentorship, and open knowledge sharing.'
+    description: '동료 리뷰, 멘토십, 열린 지식 공유를 통해 함께 성장합니다.'
   },
   {
     title: 'Diverse backgrounds welcome',
-    description: 'Whether you study business, engineering, mathematics, or humanities—your perspective adds value.'
+    description: '경영, 공학, 수학, 인문학 등 어떤 배경이든 여러분의 관점은 가치를 더합니다.'
   },
 ];
 
@@ -103,17 +103,17 @@ const recruitingTabs = {
   process: {
     title: 'Process',
     body: [
-      '1. Application Review — Submit your motivation, preferred track, and any prior work (optional).',
-      '2. Interview Rounds — Conducted concurrently: behavioral fit and foundational knowledge assessment.',
-      '3. Onboarding — Join your track, meet your team, and kick off your first project sprint.',
+      '1. 지원서 검토 — 지원 동기, 희망 트랙, 이전 작업물(선택 사항)을 제출합니다.',
+      '2. 인터뷰 — 행동 적합성 및 기초 지식 평가를 동시에 진행합니다.',
+      '3. 온보딩 — 트랙에 합류하여 팀을 만나고 첫 프로젝트 스프린트를 시작합니다.',
     ],
   },
   apply: {
     title: 'How to Apply',
     body: [
-      'Download the application form from our official blog or Naver Cafe.',
-      'Submit your completed form via email as instructed on the platform.',
-      'For the latest deadlines and announcements, check our official community pages regularly.',
+      '공식 블로그 또는 네이버 카페에서 지원서 양식을 다운로드합니다.',
+      '플랫폼에 안내된 대로 작성한 양식을 이메일로 제출합니다.',
+      '최신 마감일 및 공지사항은 공식 커뮤니티 페이지를 정기적으로 확인하세요.',
     ],
   },
 };
@@ -658,7 +658,7 @@ const LandingPage = () => (
         <div className="eyebrow">Est. 2007 • 400+ Alumni Network</div>
         <h1 className="title">Where Ambition Meets Expertise</h1>
         <p className="subtitle">
-          HYFE is the premier student-led finance society at Hanyang University, cultivating the next generation of finance professionals through rigorous training, real-world projects, and an unparalleled alumni network.
+          HYFE는 한양대학교의 대표 금융 학회로, 엄격한 교육, 실무 프로젝트, 독보적인 동문 네트워크를 통해 차세대 금융 전문가를 양성합니다.
         </p>
         <div className="hero-actions">
           <Link className="btn primary" to="/about">Discover HYFE</Link>
@@ -672,21 +672,21 @@ const LandingPage = () => (
         <div className="section-head">
           <h2 className="section-title">Growth & Success</h2>
           <p className="section-sub">
-            More than a finance club—HYFE is a launchpad for your career. From IBD to quant research, we equip you with the skills and network to excel.
+            단순한 금융 동아리를 넘어 여러분의 커리어를 위한 발판입니다. IBD부터 퀀트 리서치까지, 성공에 필요한 역량과 네트워크를 제공합니다.
           </p>
         </div>
         <div className="card-grid">
           <div className="card">
-            <h4>400+ Alumni Strong</h4>
-            <p>Our graduates lead teams at top-tier investment banks, asset managers, and hedge funds across the globe. Join a network that opens doors.</p>
+            <h4>400+ 동문 네트워크</h4>
+            <p>졸업생들은 전 세계 최상위 투자은행, 자산운용사, 헤지펀드에서 팀을 이끌고 있습니다. 기회를 여는 네트워크에 합류하세요.</p>
           </div>
           <div className="card">
-            <h4>Real-World Training</h4>
-            <p>From DCF models to algorithmic trading strategies, we don't just teach theory—we build the skills that matter in finance.</p>
+            <h4>실무 중심 교육</h4>
+            <p>DCF 모델부터 알고리즘 트레이딩 전략까지, 이론만 가르치지 않습니다. 금융에서 중요한 실무 역량을 구축합니다.</p>
           </div>
           <div className="card">
-            <h4>Proven Track Record</h4>
-            <p>CFA Research Challenge finalists, WorldQuant IQC winners, and countless placements at bulge bracket firms.</p>
+            <h4>검증된 성과</h4>
+            <p>CFA Research Challenge 파이널리스트, WorldQuant IQC 수상자, 그리고 수많은 글로벌 금융사 취업 성공 사례를 보유하고 있습니다.</p>
           </div>
         </div>
       </div>
@@ -699,7 +699,7 @@ const AboutPage = () => (
     <div className="section-head">
       <h2 className="section-title">About HYFE</h2>
       <p className="section-sub">
-        Established in 2007, HYFE has evolved from a derivatives study group into Korea's leading student-run finance society, spanning IBD, research, quant, and derivatives.
+        2007년 설립된 HYFE는 파생상품 스터디 그룹에서 시작하여 IBD, 리서치, 퀀트, 파생상품을 아우르는 한국 최고의 학생 주도 금융 학회로 성장했습니다.
       </p>
       <div className="pill">IBD • Research • Quant • Derivatives</div>
     </div>
@@ -707,17 +707,17 @@ const AboutPage = () => (
     <div className="detail-section">
       <h3>Our Legacy</h3>
       <p>
-        Founded in 2007 with a focus on financial engineering and derivatives, HYFE has grown into a comprehensive finance society covering investment banking, equity research, quantitative strategies, and structured products. Today, we are recognized as one of the most rigorous and well-connected finance clubs in Korea.
+        2007년 금융공학과 파생상품에 중점을 두고 설립된 HYFE는 투자은행, 주식 리서치, 퀀트 전략, 구조화 상품을 포괄하는 종합 금융 학회로 성장했습니다. 오늘날 우리는 한국에서 가장 엄격하고 네트워크가 잘 구축된 금융 동아리 중 하나로 인정받고 있습니다.
       </p>
 
       <h3 style={{ marginTop: 40 }}>Mission & Vision</h3>
       <p>
-        Our mission is simple: to bridge the gap between academic theory and industry practice. We provide a structured curriculum, mentorship from seasoned alumni, and hands-on projects that mirror the work done at leading financial institutions. Our vision is to cultivate a community where passion, expertise, and collaboration drive success.
+        우리의 미션은 단순합니다: 학문적 이론과 산업 실무 사이의 간극을 메우는 것입니다. 체계적인 커리큘럼, 경험 많은 동문의 멘토십, 선도적인 금융기관의 업무를 반영한 실무 프로젝트를 제공합니다. 우리의 비전은 열정, 전문성, 협업이 성공을 이끄는 커뮤니티를 만드는 것입니다.
       </p>
 
       <h3 style={{ marginTop: 40 }}>Unmatched Network</h3>
       <p>
-        With over 400 alumni working at global investment banks, asset management firms, hedge funds, and law schools, HYFE offers an unparalleled network. Through homecoming events, one-on-one mentoring, and industry panels, our members gain direct access to professionals who have walked the same path.
+        글로벌 투자은행, 자산운용사, 헤지펀드, 로스쿨에서 일하는 400명 이상의 동문을 보유한 HYFE는 독보적인 네트워크를 제공합니다. 홈커밍 이벤트, 일대일 멘토링, 산업 패널을 통해 우리 회원들은 같은 길을 걸어온 전문가들과 직접 소통할 수 있습니다.
       </p>
     </div>
 
@@ -733,7 +733,7 @@ const PeoplePage = () => (
     <div className="section-head">
       <h2 className="section-title">Who We're Looking For</h2>
       <p className="section-sub">
-        At HYFE, we don't hire resumes—we seek individuals with curiosity, grit, and a genuine passion for finance. Whether you're from business, engineering, mathematics, or the humanities, if you're ready to learn and contribute, you belong here.
+        HYFE는 스펙이 아닌 사람을 봅니다. 호기심, 끈기, 금융에 대한 진정한 열정을 가진 사람을 찾습니다. 경영, 공학, 수학, 인문학 등 어떤 배경이든 배우고 기여할 준비가 되어 있다면 환영합니다.
       </p>
     </div>
 
@@ -749,10 +749,10 @@ const PeoplePage = () => (
     <div className="detail-section">
       <h3>Our Culture</h3>
       <p>
-        HYFE thrives on a culture of mentorship and mutual growth. Senior members guide juniors through complex projects, alumni share industry insights, and everyone contributes to a collaborative environment. We believe that the best learning happens when knowledge is shared freely and ambitions are supported collectively.
+        HYFE는 멘토십과 상호 성장의 문화를 기반으로 운영됩니다. 선배 회원들은 복잡한 프로젝트를 통해 후배를 안내하고, 동문들은 산업 인사이트를 공유하며, 모두가 협력적인 환경에 기여합니다. 우리는 지식이 자유롭게 공유되고 야망이 함께 지지될 때 최고의 학습이 일어난다고 믿습니다.
       </p>
       <p style={{ marginTop: 20 }}>
-        <strong>No prior finance experience required.</strong> Our curriculum is designed to take you from foundational concepts to advanced applications. All we ask is that you bring dedication, curiosity, and a willingness to push your limits.
+        <strong>사전 금융 경험은 필요하지 않습니다.</strong> 우리의 커리큘럼은 기초 개념부터 고급 응용까지 단계적으로 설계되었습니다. 우리가 요구하는 것은 헌신, 호기심, 그리고 한계를 넘어서려는 의지뿐입니다.
       </p>
     </div>
 
@@ -768,7 +768,7 @@ const ActivitiesIndex = () => (
     <div className="section-head">
       <h2 className="section-title">Our Activities</h2>
       <p className="section-sub">
-        Each track follows a structured three-stage curriculum: Education → Practice → Project. From foundational concepts to industry-grade deliverables, you'll build skills that matter.
+        각 트랙은 체계적인 3단계 커리큘럼을 따릅니다: Education → Practice → Project. 기초 개념부터 산업 수준의 결과물까지, 중요한 역량을 구축합니다.
       </p>
     </div>
 
@@ -786,7 +786,7 @@ const ActivitiesIndex = () => (
       <div className="section-head">
         <h2 className="section-title">Choose Your Track</h2>
         <p className="section-sub">
-          Dive deep into your area of interest. Each team combines rigorous training with real-world applications.
+          관심 분야를 깊이 탐구하세요. 각 팀은 엄격한 교육과 실무 적용을 결합합니다.
         </p>
       </div>
       <div className="card-grid">
@@ -804,7 +804,7 @@ const ActivitiesIndex = () => (
       <div className="section-head">
         <h2 className="section-title">Achievements</h2>
         <p className="section-sub">
-          Our members consistently excel in top-tier finance competitions, earning recognition on national and global stages.
+          우리 회원들은 최상위 금융 대회에서 지속적으로 우수한 성적을 거두며 국내외 무대에서 인정받고 있습니다.
         </p>
       </div>
       <div className="awards-list">
@@ -828,7 +828,7 @@ const ActivityDetail = () => {
     return (
       <div className="container" style={{ padding: '100px 0', textAlign: 'center' }}>
         <h2 className="section-title">Activity Not Found</h2>
-        <p className="section-sub">The team you're looking for does not exist.</p>
+        <p className="section-sub">찾으시는 팀이 존재하지 않습니다.</p>
         <div style={{ marginTop: 32, display: 'flex', gap: 16, justifyContent: 'center' }}>
           <Link className="btn" to="/activities">Back to Activities</Link>
           <Link className="btn primary" to="/">Home</Link>
@@ -872,18 +872,18 @@ const RecruitingPage = ({ mode }) => {
       <div className="section-head">
         <h2 className="section-title">Recruiting</h2>
         <p className="section-sub">
-          We seek passionate individuals ready to learn, contribute, and grow. Our process is designed to identify potential, not polish.
+          배우고, 기여하고, 성장할 준비가 된 열정적인 사람을 찾습니다. 우리의 프로세스는 완성도가 아닌 잠재력을 발굴하도록 설계되었습니다.
         </p>
       </div>
 
       <div className="recruiting-options">
         <Link className={`option-btn ${mode === 'process' ? 'active' : ''}`} to="/recruiting/process">
           <div className="option-title">Process</div>
-          <div className="option-desc">Application steps and timeline overview.</div>
+          <div className="option-desc">지원 단계 및 타임라인 개요</div>
         </Link>
         <Link className={`option-btn ${mode === 'apply' ? 'active' : ''}`} to="/recruiting/apply">
           <div className="option-title">How to Apply</div>
-          <div className="option-desc">Submission guidelines and platform details.</div>
+          <div className="option-desc">제출 가이드라인 및 플랫폼 세부정보</div>
         </Link>
       </div>
 
@@ -899,7 +899,7 @@ const RecruitingPage = ({ mode }) => {
       {mode === 'apply' && (
         <div className="cta-section">
           <h3>Ready to Start Your Journey?</h3>
-          <p>Download the application form and submit it via the official platform. Check our blog and Naver Cafe for the latest updates and deadlines.</p>
+          <p>지원서 양식을 다운로드하여 공식 플랫폼을 통해 제출하세요. 최신 업데이트 및 마감일은 블로그와 네이버 카페를 확인하세요.</p>
           <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
             <a className="btn primary" href="https://cafe.naver.com/f-e/cafes/28919085/menus/1?viewType=L" target="_blank" rel="noreferrer">
               Visit Application Portal
