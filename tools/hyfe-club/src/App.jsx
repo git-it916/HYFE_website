@@ -656,9 +656,10 @@ const LandingPage = () => (
     <section className="hero">
       <div className="hero-content">
         <div className="eyebrow">Est. 2007 • 400+ Alumni Network</div>
-        <h1 className="title">Where Ambition Meets Expertise</h1>
+        <h1 className="title" style={{ whiteSpace: 'nowrap' }}>Where Theory Becomes Alpha</h1>
         <p className="subtitle">
-          HYFE는 한양대학교의 대표 금융 학회로, 엄격한 교육, 실무 프로젝트, 독보적인 동문 네트워크를 통해 차세대 금융 전문가를 양성합니다.
+          HYFE는 한양대학교의 대표 금융 학회로<br />
+          엄격한 교육, 실전 프로젝트, 네트워크를 통해 금융 전문가를 양성합니다.
         </p>
         <div className="hero-actions">
           <Link className="btn primary" to="/about">Discover HYFE</Link>
@@ -672,21 +673,21 @@ const LandingPage = () => (
         <div className="section-head">
           <h2 className="section-title">Growth & Success</h2>
           <p className="section-sub">
-            단순한 금융 동아리를 넘어 여러분의 커리어를 위한 발판입니다. IBD부터 퀀트 리서치까지, 성공에 필요한 역량과 네트워크를 제공합니다.
+            단순한 금융 동아리를 넘어 여러분의 커리어를 위한 발판입니다. 퀀트 리서치부터 IBD까지, 성장에 필요한 교육을 제공합니다.
           </p>
         </div>
         <div className="card-grid">
           <div className="card">
             <h4>400+ 동문 네트워크</h4>
-            <p>졸업생들은 전 세계 최상위 투자은행, 자산운용사, 헤지펀드에서 팀을 이끌고 있습니다. 기회를 여는 네트워크에 합류하세요.</p>
+            <p>졸업생들은 국내외 투자은행, 자산운용사, 헤지펀드에서 일하고 있습니다. 기회를 여는 네트워크에 합류하세요.</p>
           </div>
           <div className="card">
             <h4>실무 중심 교육</h4>
-            <p>DCF 모델부터 알고리즘 트레이딩 전략까지, 이론만 가르치지 않습니다. 금융에서 중요한 실무 역량을 구축합니다.</p>
+            <p>알고리즘 트레이딩 전략부터 DCF 모델까지, 이론만 배우는 것이 아닌 프로젝트 경험을 제시합니다.</p>
           </div>
           <div className="card">
             <h4>검증된 성과</h4>
-            <p>CFA Research Challenge 파이널리스트, WorldQuant IQC 수상자, 그리고 수많은 글로벌 금융사 취업 성공 사례를 보유하고 있습니다.</p>
+            <p>CFA Research Challenge 한국 결승, WorldQuant IQC 한국 결승, 그리고 수많은 취업 성공 사례를 보유하고 있습니다.</p>
           </div>
         </div>
       </div>
@@ -699,7 +700,7 @@ const AboutPage = () => (
     <div className="section-head">
       <h2 className="section-title">About HYFE</h2>
       <p className="section-sub">
-        2007년 설립된 HYFE는 파생상품 스터디 그룹에서 시작하여 IBD, 리서치, 퀀트, 파생상품을 아우르는 한국 최고의 학생 주도 금융 학회로 성장했습니다.
+        2007년 설립된 HYFE는 파생상품 스터디 그룹에서 시작하여 퀀트, 파생상품, IBD, 리서치를 아우르는 학생 주도 금융 학회로 성장했습니다.
       </p>
       <div className="pill">IBD • Research • Quant • Derivatives</div>
     </div>
