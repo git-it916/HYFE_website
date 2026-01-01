@@ -259,7 +259,7 @@ const Layout = ({ children }) => (
         line-height: 1;
         margin: 0;
         font-weight: 800;
-        letter-spacing: -0.03em;
+        letter-spacing: 0.02em;
         background: linear-gradient(135deg, var(--ink) 0%, var(--accent) 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
