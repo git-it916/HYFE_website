@@ -656,7 +656,7 @@ const LandingPage = () => (
     <section className="hero">
       <div className="hero-content">
         <div className="eyebrow">Est. 2007 • 400+ Alumni Network</div>
-        <h1 className="title" style={{ whiteSpace: 'nowrap' }}>Where Theory Becomes Alpha</h1>
+        <h1 className="title">Where Theory Becomes Alpha</h1>
         <p className="subtitle">
           HYFE는 한양대학교의 대표 금융 학회로<br />
           엄격한 교육, 실전 프로젝트, 네트워크를 통해 금융 전문가를 양성합니다.
