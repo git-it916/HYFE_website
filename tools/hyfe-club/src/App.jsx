@@ -414,6 +414,76 @@ const Layout = ({ children }) => (
         font-size: 15px;
         line-height: 1.5;
       }
+
+      .gallery-section {
+        padding-top: 20px;
+        padding-bottom: 80px;
+      }
+
+      .gallery-rail {
+        position: relative;
+        overflow: hidden;
+        margin-top: 12px;
+      }
+
+      .gallery-rail::before,
+      .gallery-rail::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 160px;
+        height: 100%;
+        z-index: 2;
+        pointer-events: none;
+      }
+
+      .gallery-rail::before {
+        left: 0;
+        background: linear-gradient(90deg, var(--bg) 0%, rgba(232,243,255,0) 100%);
+      }
+
+      .gallery-rail::after {
+        right: 0;
+        background: linear-gradient(270deg, var(--bg) 0%, rgba(232,243,255,0) 100%);
+      }
+
+      .rail-track {
+        display: flex;
+        gap: 18px;
+        padding: 8px 6px;
+        animation: rail-slide 26s linear infinite;
+        width: max-content;
+      }
+
+      .rail-card {
+        width: 320px;
+        height: 200px;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        box-shadow: 0 20px 50px rgba(0,0,0,0.06);
+        background: var(--card);
+      }
+
+      .rail-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+        filter: saturate(1.08);
+      }
+
+      @keyframes rail-slide {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+      }
+
+      @media (max-width: 640px) {
+        .gallery-section { padding-bottom: 64px; }
+        .rail-card { width: 240px; height: 150px; }
+        .gallery-rail::before,
+        .gallery-rail::after { width: 80px; }
+      }
     `}</style>
 
     <div className="page">
@@ -445,6 +515,15 @@ const Layout = ({ children }) => (
 
 
 const LandingPage = () => {
+  const galleryImages = [
+    { src: 'https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=1200&q=80', alt: 'Team collaboration at whiteboard' },
+    { src: 'https://images.unsplash.com/photo-1454165205744-3b78555e5572?auto=format&fit=crop&w=1200&q=80', alt: 'Laptops and notes during study session' },
+    { src: 'https://images.unsplash.com/photo-1520607162513-3b409fb50f2d?auto=format&fit=crop&w=1200&q=80', alt: 'Group discussion around a table' },
+    { src: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=1200&q=80', alt: 'Coding and research at night' },
+    { src: 'https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&w=1200&q=80', alt: 'Presentation prep with charts' },
+    { src: 'https://images.unsplash.com/photo-1487058792275-0ad4aaf24ca7?auto=format&fit=crop&w=1200&q=80', alt: 'Notebooks and headphones ready to work' },
+  ];
+
   return (
     <>
       <section id="home" className="hero">
@@ -460,33 +539,24 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section>
+      <section className="gallery-section">
         <div className="container">
           <div className="section-head">
             <div>
-              <h2 className="section-title">Explore HYFE</h2>
+              <h2 className="section-title">HYFE in motion</h2>
               <p className="section-sub">
-                Jump straight to the pages for our story, team structure, activities, and recruiting process.
+                Sessions, late-night sprints, and moments from the floor. Tap a track to see what we are building next.
               </p>
             </div>
           </div>
-          <div className="card-grid">
-            <Link className="card" to="/about">
-              <h4>About us</h4>
-              <p>Who we are, how we learn, and what makes HYFE tick.</p>
-            </Link>
-            <Link className="card" to="/activities">
-              <h4>Activities</h4>
-              <p>See all tracks (Quant, IB, Research, Derivatives) and their deliverables.</p>
-            </Link>
-            <Link className="card" to="/people">
-              <h4>People</h4>
-              <p>Meet the leads, analysts, and new members who build together.</p>
-            </Link>
-            <Link className="card" to="/recruiting/timeline">
-              <h4>Recruiting</h4>
-              <p>Check the timeline or apply directly for the upcoming cohort.</p>
-            </Link>
+        </div>
+        <div className="gallery-rail">
+          <div className="rail-track">
+            {[...galleryImages, ...galleryImages].map((item, idx) => (
+              <div className="rail-card" key={`${item.src}-${idx}`}>
+                <img src={item.src} alt={item.alt} loading="lazy" />
+              </div>
+            ))}
           </div>
         </div>
       </section>
