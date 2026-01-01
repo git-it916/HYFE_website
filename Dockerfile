@@ -12,8 +12,9 @@ RUN npm ci
 # Copy source code
 COPY tools/hyfe-club/ ./
 
-# Build the application
-RUN npm run build
+# Set proper permissions and build
+RUN chmod -R 755 node_modules/.bin && \
+    npm run build
 
 # Production stage
 FROM nginx:alpine
