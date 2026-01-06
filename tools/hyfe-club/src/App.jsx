@@ -987,60 +987,97 @@ const ActivitiesIndex = () => {
                 )}
               </div>
 
-              {isAdmin ? (
-                <textarea
-                  value={team.text}
-                  onChange={(e) => updateTeamSession(team.id, e.target.value, team.images)}
-                  placeholder={`${team.title} 활동 내용을 입력하세요...`}
-                  style={{
-                    width: '100%',
-                    minHeight: '80px',
-                    padding: '12px',
-                    fontSize: '16px',
-                    border: '2px solid var(--border)',
-                    borderRadius: '8px',
-                    fontFamily: 'inherit',
-                    marginBottom: '20px'
-                  }}
-                />
-              ) : (
-                team.text && <p>{team.text}</p>
-              )}
+              {/* 이미지(왼쪽) + 텍스트(오른쪽) 레이아웃 */}
+              <div style={{ display: 'flex', gap: '24px', flexWrap: 'wrap' }}>
+                {/* 왼쪽: 이미지 영역 */}
+                <div style={{ flex: '1 1 400px', minWidth: '300px' }}>
+                  {team.images.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                      {team.images.map((img, idx) => (
+                        <div key={idx} style={{ position: 'relative' }}>
+                          <img
+                            src={img}
+                            alt={`${team.title} ${idx + 1}`}
+                            style={{
+                              width: '100%',
+                              height: 'auto',
+                              borderRadius: '12px',
+                              boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                            }}
+                          />
+                          {isAdmin && (
+                            <button
+                              onClick={() => removeImage('team', idx, team.id)}
+                              style={{
+                                position: 'absolute',
+                                top: '8px',
+                                right: '8px',
+                                background: 'rgba(220, 38, 38, 0.9)',
+                                color: '#fff',
+                                border: 'none',
+                                borderRadius: '50%',
+                                width: '28px',
+                                height: '28px',
+                                cursor: 'pointer',
+                                fontSize: '16px',
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                              }}
+                            >
+                              ×
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    isAdmin && (
+                      <div style={{
+                        padding: '40px',
+                        textAlign: 'center',
+                        border: '2px dashed var(--border)',
+                        borderRadius: '12px',
+                        color: 'var(--muted)'
+                      }}>
+                        이미지를 추가하세요
+                      </div>
+                    )
+                  )}
+                </div>
 
-              {/* 팀 이미지 */}
-              {team.images.length > 0 && (
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px', marginTop: '20px' }}>
-                  {team.images.map((img, idx) => (
-                    <div key={idx} style={{ position: 'relative' }}>
-                      <img src={img} alt={`${team.title} ${idx + 1}`} style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
-                      {isAdmin && (
-                        <button
-                          onClick={() => removeImage('team', idx, team.id)}
-                          style={{
-                            position: 'absolute',
-                            top: '8px',
-                            right: '8px',
-                            background: 'rgba(220, 38, 38, 0.9)',
-                            color: '#fff',
-                            border: 'none',
-                            borderRadius: '50%',
-                            width: '28px',
-                            height: '28px',
-                            cursor: 'pointer',
-                            fontSize: '16px',
-                            fontWeight: 'bold',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                          }}
-                        >
-                          ×
-                        </button>
+                {/* 오른쪽: 텍스트 영역 */}
+                <div style={{ flex: '1 1 400px', minWidth: '300px', display: 'flex', alignItems: 'center' }}>
+                  {isAdmin ? (
+                    <textarea
+                      value={team.text}
+                      onChange={(e) => updateTeamSession(team.id, e.target.value, team.images)}
+                      placeholder={`${team.title} 활동 내용을 입력하세요...`}
+                      style={{
+                        width: '100%',
+                        minHeight: '200px',
+                        padding: '12px',
+                        fontSize: '16px',
+                        border: '2px solid var(--border)',
+                        borderRadius: '8px',
+                        fontFamily: 'inherit',
+                        resize: 'vertical'
+                      }}
+                    />
+                  ) : (
+                    <div style={{ width: '100%' }}>
+                      {team.text ? (
+                        <p style={{ margin: 0, lineHeight: '1.8', fontSize: '16px' }}>{team.text}</p>
+                      ) : (
+                        <p style={{ margin: 0, color: 'var(--muted)', fontStyle: 'italic' }}>
+                          활동 내용이 아직 작성되지 않았습니다.
+                        </p>
                       )}
                     </div>
-                  ))}
+                  )}
                 </div>
-              )}
+              </div>
             </div>
           ))}
         </div>
