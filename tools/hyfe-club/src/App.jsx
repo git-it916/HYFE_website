@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Link, useParams } from 'react-router-dom';
 
 const activities = [
@@ -79,6 +79,16 @@ const awards = [
   'CFA Research Challenge — National Finalist',
   'DB GAPS — Excellence Award',
 ];
+
+// 관리자 패스워드 (실제로는 환경변수로 관리해야 함)
+const ADMIN_PASSWORD = 'hyfe2024';
+
+// localStorage 키
+const STORAGE_KEYS = {
+  IS_ADMIN: 'hyfe_is_admin',
+  MARKET_REVIEW: 'hyfe_market_review',
+  TEAM_SESSIONS: 'hyfe_team_sessions'
+};
 
 const idealCandidates = [
   {
@@ -632,7 +642,6 @@ const Layout = ({ children }) => (
               <li><Link to="/">Home</Link></li>
               <li><Link to="/about">About Us</Link></li>
               <li><Link to="/activities">Activities</Link></li>
-              <li><Link to="/people">Teams</Link></li>
               <li><Link to="/recruiting/process">Recruiting</Link></li>
             </ul>
           </nav>
@@ -728,97 +737,321 @@ const AboutPage = () => (
   </div>
 );
 
-const PeoplePage = () => (
-  <div className="container" style={{ padding: '100px 0' }}>
-    <div className="section-head">
-      <h2 className="section-title">Who We're Looking For</h2>
-      <p className="section-sub">
-        HYFE는 스펙이 아닌 사람을 봅니다. 호기심, 끈기, 금융에 대한 진정한 열정을 가진 사람을 찾습니다. 경영, 공학, 수학, 인문학 등 어떤 배경이든 배우고 기여할 준비가 되어 있다면 환영합니다.
-      </p>
-    </div>
 
-    <div className="ideal-grid">
-      {idealCandidates.map((item) => (
-        <div className="ideal-card" key={item.title}>
-          <h4>{item.title}</h4>
-          <p>{item.description}</p>
+const ActivitiesIndex = () => {
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [password, setPassword] = useState('');
+  const [marketReview, setMarketReview] = useState({ text: '', images: [] });
+  const [teamSessions, setTeamSessions] = useState([
+    { id: 'quant', title: 'Quant Team', text: '', images: [] },
+    { id: 'ibd', title: 'IBD Team', text: '', images: [] },
+    { id: 'research', title: 'Research Team', text: '', images: [] },
+    { id: 'derivatives', title: 'Derivatives Team', text: '', images: [] }
+  ]);
+
+  // 로컬스토리지에서 데이터 불러오기
+  useEffect(() => {
+    const savedAdmin = localStorage.getItem(STORAGE_KEYS.IS_ADMIN) === 'true';
+    setIsAdmin(savedAdmin);
+
+    const savedMarketReview = localStorage.getItem(STORAGE_KEYS.MARKET_REVIEW);
+    if (savedMarketReview) {
+      setMarketReview(JSON.parse(savedMarketReview));
+    }
+
+    const savedTeamSessions = localStorage.getItem(STORAGE_KEYS.TEAM_SESSIONS);
+    if (savedTeamSessions) {
+      setTeamSessions(JSON.parse(savedTeamSessions));
+    }
+  }, []);
+
+  // 로그인 처리
+  const handleLogin = () => {
+    if (password === ADMIN_PASSWORD) {
+      setIsAdmin(true);
+      localStorage.setItem(STORAGE_KEYS.IS_ADMIN, 'true');
+      setShowLoginModal(false);
+      setPassword('');
+      alert('관리자 모드로 로그인되었습니다.');
+    } else {
+      alert('비밀번호가 틀렸습니다.');
+    }
+  };
+
+  // 로그아웃 처리
+  const handleLogout = () => {
+    setIsAdmin(false);
+    localStorage.removeItem(STORAGE_KEYS.IS_ADMIN);
+    alert('로그아웃되었습니다.');
+  };
+
+  // 시황정리 업데이트
+  const updateMarketReview = (text, images) => {
+    const updated = { text, images };
+    setMarketReview(updated);
+    localStorage.setItem(STORAGE_KEYS.MARKET_REVIEW, JSON.stringify(updated));
+  };
+
+  // 팀 세션 업데이트
+  const updateTeamSession = (teamId, text, images) => {
+    const updated = teamSessions.map(team =>
+      team.id === teamId ? { ...team, text, images } : team
+    );
+    setTeamSessions(updated);
+    localStorage.setItem(STORAGE_KEYS.TEAM_SESSIONS, JSON.stringify(updated));
+  };
+
+  // 이미지 추가
+  const addImage = (type, teamId = null) => {
+    const filename = prompt('이미지 파일명을 입력하세요 (예: meeting.jpg)\n파일은 public/images/activities/ 폴더에 있어야 합니다.');
+    if (!filename) return;
+
+    const imagePath = `/images/activities/${filename}`;
+
+    if (type === 'market') {
+      updateMarketReview(marketReview.text, [...marketReview.images, imagePath]);
+    } else if (type === 'team' && teamId) {
+      const team = teamSessions.find(t => t.id === teamId);
+      if (team) {
+        updateTeamSession(teamId, team.text, [...team.images, imagePath]);
+      }
+    }
+  };
+
+  // 이미지 삭제
+  const removeImage = (type, index, teamId = null) => {
+    if (type === 'market') {
+      const newImages = marketReview.images.filter((_, i) => i !== index);
+      updateMarketReview(marketReview.text, newImages);
+    } else if (type === 'team' && teamId) {
+      const team = teamSessions.find(t => t.id === teamId);
+      if (team) {
+        const newImages = team.images.filter((_, i) => i !== index);
+        updateTeamSession(teamId, team.text, newImages);
+      }
+    }
+  };
+
+  return (
+    <div className="container" style={{ padding: '100px 0' }}>
+      {/* 관리자 로그인/로그아웃 버튼 */}
+      <div style={{ position: 'fixed', top: '100px', right: '20px', zIndex: 999 }}>
+        {!isAdmin ? (
+          <button onClick={() => setShowLoginModal(true)} className="btn" style={{ fontSize: '14px', padding: '10px 20px' }}>
+            관리자 로그인
+          </button>
+        ) : (
+          <button onClick={handleLogout} className="btn" style={{ fontSize: '14px', padding: '10px 20px', background: 'var(--accent)', color: '#fff' }}>
+            로그아웃
+          </button>
+        )}
+      </div>
+
+      {/* 로그인 모달 */}
+      {showLoginModal && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: '#fff',
+            padding: '40px',
+            borderRadius: '20px',
+            maxWidth: '400px',
+            width: '90%'
+          }}>
+            <h3 style={{ marginTop: 0 }}>관리자 로그인</h3>
+            <input
+              type="password"
+              placeholder="비밀번호 입력"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleLogin()}
+              style={{
+                width: '100%',
+                padding: '12px',
+                fontSize: '16px',
+                border: '2px solid var(--border)',
+                borderRadius: '8px',
+                marginBottom: '20px'
+              }}
+            />
+            <div style={{ display: 'flex', gap: '12px' }}>
+              <button onClick={handleLogin} className="btn primary" style={{ flex: 1 }}>
+                로그인
+              </button>
+              <button onClick={() => { setShowLoginModal(false); setPassword(''); }} className="btn" style={{ flex: 1 }}>
+                취소
+              </button>
+            </div>
+          </div>
         </div>
-      ))}
-    </div>
+      )}
 
-    <div className="detail-section">
-      <h3>Our Culture</h3>
-      <p>
-        HYFE는 멘토십과 상호 성장의 문화를 기반으로 운영됩니다. 선배 회원들은 복잡한 프로젝트를 통해 후배를 안내하고, 동문들은 산업 인사이트를 공유하며, 모두가 협력적인 환경에 기여합니다. 우리는 지식이 자유롭게 공유되고 야망이 함께 지지될 때 최고의 학습이 일어난다고 믿습니다.
-      </p>
-      <p style={{ marginTop: 20 }}>
-        <strong>사전 금융 경험은 필요하지 않습니다.</strong> 우리의 커리큘럼은 기초 개념부터 고급 응용까지 단계적으로 설계되었습니다. 우리가 요구하는 것은 헌신, 호기심, 그리고 한계를 넘어서려는 의지뿐입니다.
-      </p>
-    </div>
-
-    <div style={{ marginTop: 40, display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center' }}>
-      <Link className="btn primary" to="/recruiting/process">Apply Now</Link>
-      <Link className="btn" to="/about">Learn More</Link>
-    </div>
-  </div>
-);
-
-const ActivitiesIndex = () => (
-  <div className="container" style={{ padding: '100px 0' }}>
-    <div className="section-head">
-      <h2 className="section-title">Our Activities</h2>
-      <p className="section-sub">
-        각 트랙은 체계적인 3단계 커리큘럼을 따릅니다: Education → Practice → Project. 기초 개념부터 산업 수준의 결과물까지, 중요한 역량을 구축합니다.
-      </p>
-    </div>
-
-    <div className="curriculum-row">
-      {curriculumStages.map((stage) => (
-        <div className="curriculum-card" key={stage.level}>
-          <div className="level">{stage.level}</div>
-          <h4>{stage.title}</h4>
-          <p>{stage.description}</p>
-        </div>
-      ))}
-    </div>
-
-    <div style={{ marginTop: 80 }}>
       <div className="section-head">
-        <h2 className="section-title">Choose Your Track</h2>
+        <h2 className="section-title">Our Activities</h2>
         <p className="section-sub">
-          관심 분야를 깊이 탐구하세요. 각 팀은 엄격한 교육과 실무 적용을 결합합니다.
+          매주 진행되는 시황정리와 팀별 세션을 통해 실무 역량을 키웁니다.
         </p>
       </div>
-      <div className="card-grid">
-        {activities.map((item) => (
-          <Link key={item.id} to={`/activities/${item.id}`} className="card">
-            <div className="tag">{item.tag}</div>
-            <h4>{item.title}</h4>
-            <p>{item.summary}</p>
-          </Link>
-        ))}
-      </div>
-    </div>
 
-    <div style={{ marginTop: 80 }}>
-      <div className="section-head">
-        <h2 className="section-title">Achievements</h2>
-        <p className="section-sub">
-          우리 회원들은 최상위 금융 대회에서 지속적으로 우수한 성적을 거두며 국내외 무대에서 인정받고 있습니다.
-        </p>
-      </div>
-      <div className="awards-list">
-        {awards.map((award) => (
-          <div className="award-item" key={award}>{award}</div>
-        ))}
-      </div>
-    </div>
+      {/* 시황정리 섹션 */}
+      <div className="detail-section" style={{ marginTop: '40px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+          <h3 style={{ margin: 0 }}>시황정리</h3>
+          {isAdmin && (
+            <button onClick={() => addImage('market')} className="btn" style={{ fontSize: '14px', padding: '8px 16px' }}>
+              + 이미지 추가
+            </button>
+          )}
+        </div>
 
-    <div style={{ marginTop: 60, textAlign: 'center' }}>
-      <Link className="btn primary" to="/recruiting/process">Ready to Join?</Link>
+        {isAdmin ? (
+          <textarea
+            value={marketReview.text}
+            onChange={(e) => updateMarketReview(e.target.value, marketReview.images)}
+            placeholder="시황정리 내용을 입력하세요..."
+            style={{
+              width: '100%',
+              minHeight: '100px',
+              padding: '12px',
+              fontSize: '16px',
+              border: '2px solid var(--border)',
+              borderRadius: '8px',
+              fontFamily: 'inherit',
+              marginBottom: '20px'
+            }}
+          />
+        ) : (
+          <p>{marketReview.text || '모든 팀이 모여 한 주간의 매크로 이슈와 에쿼티 이슈에 대해 발표하고 질문하는 시간을 가집니다.'}</p>
+        )}
+
+        {/* 시황정리 이미지 */}
+        {marketReview.images.length > 0 && (
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px', marginTop: '20px' }}>
+            {marketReview.images.map((img, idx) => (
+              <div key={idx} style={{ position: 'relative' }}>
+                <img src={img} alt={`시황정리 ${idx + 1}`} style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                {isAdmin && (
+                  <button
+                    onClick={() => removeImage('market', idx)}
+                    style={{
+                      position: 'absolute',
+                      top: '8px',
+                      right: '8px',
+                      background: 'rgba(220, 38, 38, 0.9)',
+                      color: '#fff',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '28px',
+                      height: '28px',
+                      cursor: 'pointer',
+                      fontSize: '16px',
+                      fontWeight: 'bold',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* 팀별 세션 */}
+      <div style={{ marginTop: '60px' }}>
+        <h3 className="section-title" style={{ fontSize: '36px', marginBottom: '40px', textAlign: 'center' }}>팀별 세션</h3>
+
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+          {teamSessions.map((team) => (
+            <div key={team.id} className="detail-section">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <h3 style={{ margin: 0 }}>{team.title}</h3>
+                {isAdmin && (
+                  <button onClick={() => addImage('team', team.id)} className="btn" style={{ fontSize: '14px', padding: '8px 16px' }}>
+                    + 이미지 추가
+                  </button>
+                )}
+              </div>
+
+              {isAdmin ? (
+                <textarea
+                  value={team.text}
+                  onChange={(e) => updateTeamSession(team.id, e.target.value, team.images)}
+                  placeholder={`${team.title} 활동 내용을 입력하세요...`}
+                  style={{
+                    width: '100%',
+                    minHeight: '80px',
+                    padding: '12px',
+                    fontSize: '16px',
+                    border: '2px solid var(--border)',
+                    borderRadius: '8px',
+                    fontFamily: 'inherit',
+                    marginBottom: '20px'
+                  }}
+                />
+              ) : (
+                team.text && <p>{team.text}</p>
+              )}
+
+              {/* 팀 이미지 */}
+              {team.images.length > 0 && (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '16px', marginTop: '20px' }}>
+                  {team.images.map((img, idx) => (
+                    <div key={idx} style={{ position: 'relative' }}>
+                      <img src={img} alt={`${team.title} ${idx + 1}`} style={{ width: '100%', borderRadius: '12px', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }} />
+                      {isAdmin && (
+                        <button
+                          onClick={() => removeImage('team', idx, team.id)}
+                          style={{
+                            position: 'absolute',
+                            top: '8px',
+                            right: '8px',
+                            background: 'rgba(220, 38, 38, 0.9)',
+                            color: '#fff',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '28px',
+                            height: '28px',
+                            cursor: 'pointer',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                          }}
+                        >
+                          ×
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ marginTop: 60, textAlign: 'center' }}>
+        <Link className="btn primary" to="/recruiting/process">Ready to Join?</Link>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ActivityDetail = () => {
   const { id } = useParams();
@@ -922,7 +1155,6 @@ const App = () => (
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/about" element={<AboutPage />} />
-        <Route path="/people" element={<PeoplePage />} />
         <Route path="/activities" element={<ActivitiesIndex />} />
         <Route path="/activities/:id" element={<ActivityDetail />} />
         <Route path="/recruiting/process" element={<RecruitingPage mode="process" />} />
