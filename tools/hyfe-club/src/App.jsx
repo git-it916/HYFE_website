@@ -98,9 +98,9 @@ const idealCandidates = [
 ];
 
 const aboutCards = [
-  { title: 'Our Legacy', text: '2007년 금융공학과 파생상품에 중점을 두고 설립된 HYFE는 투자은행, 주식 리서치, 퀀트 전략, 구조화 상품을 포괄하는 종합 금융 학회로 성장했습니다. 한국에서 가장 엄격하고 네트워크가 잘 구축된 금융 동아리 중 하나로 인정받고 있습니다.' },
+  { title: 'Our Legacy', text: '2007년 금융공학과 파생상품에 중점을 두고 설립된 HYFE는 투자은행, 주식 리서치, 퀀트 전략, 구조화 상품을 포괄하는 종합 금융 학회로 성장했습니다.' },
   { title: 'Mission & Vision', text: '학문적 이론과 산업 실무 사이의 간극을 메우는 것. 체계적인 커리큘럼, 경험 많은 동문의 멘토십, 실무 프로젝트를 제공하며, 열정과 전문성, 협업이 성공을 이끄는 커뮤니티를 만들어갑니다.' },
-  { title: 'Unmatched Network', text: '글로벌 투자은행, 자산운용사, 헤지펀드, 로스쿨에서 일하는 400명 이상의 동문. 홈커밍 이벤트, 일대일 멘토링, 산업 패널을 통해 현직 전문가들과 직접 소통할 수 있습니다.' },
+  { title: 'Unmatched Network', text: '글로벌 투자은행, 자산운용사, 헤지펀드, 로스쿨에서 일하는 400명 이상의 동문이 있습니다. 홈커밍 이벤트, 일대일 멘토링을 통해 현직자와 직접 소통할 수 있습니다.' },
   { title: 'Curriculum', text: 'Education → Practice → Project 3단계 체계적 커리큘럼으로 기초부터 실무까지 단계별로 역량을 쌓아갑니다. 각 팀별 맞춤형 교육과정을 운영합니다.' },
 ];
 
@@ -248,8 +248,8 @@ const Hero = () => {
       const cd = cwp.map(([tx, h], i) =>
         (i ? 'L' : 'M') + (ex + dx * tx).toFixed(1) + ' ' + (ey - ry * h).toFixed(1)).join(' ');
 
-      animate(path, d, '3s', '0s');     // draw up to the dot (3s)
-      animate(cont, cd, '2s', '4.3s');  // hold 1.3s, then climb 2s (3s + 1.3s = 4.3s delay)
+      animate(path, d, '2.5s', '0s');   // draw up to the dot (2.5s)
+      animate(cont, cd, '2s', '3.2s');  // hold 0.7s, then climb 2s (2.5s + 0.7s = 3.2s delay)
     };
     draw();
     let raf = 0;
@@ -321,8 +321,8 @@ const FollowCTA = () => {
     if (reduce) return;
     let raf = 0;
     const tick = () => {
-      cur.current.x += (target.current.x - cur.current.x) * 0.1;  // 0.1 = creep speed
-      cur.current.y += (target.current.y - cur.current.y) * 0.1;
+      cur.current.x += (target.current.x - cur.current.x) * 0.05;  // creep speed (halved)
+      cur.current.y += (target.current.y - cur.current.y) * 0.05;
       const btn = btnRef.current;
       if (btn) btn.style.transform = `translate(${cur.current.x.toFixed(1)}px, ${cur.current.y.toFixed(1)}px)`;
       raf = requestAnimationFrame(tick);
@@ -425,7 +425,7 @@ const globalStyles = `
   /* ── Buttons ── */
   .btn{font-size:13px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
     padding:13px 24px;border-radius:4px;border:1px solid var(--panel-line);cursor:pointer;transition:.22s;
-    display:inline-flex;align-items:center;justify-content:center;gap:8px;background:transparent;color:var(--ink)}
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;background:#fff;color:var(--ink)}
   .btn:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
   .btn.gold{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700}
   .btn.gold:hover{background:#1d4ed8;border-color:#1d4ed8;color:#fff;box-shadow:0 10px 28px rgba(37,99,235,.28);transform:translateY(-2px)}
@@ -448,7 +448,7 @@ const globalStyles = `
   h1.display{font-weight:800;font-size:clamp(44px,7.5vw,94px);line-height:1.0;letter-spacing:-.04em;color:var(--ink)}
   h1.display em{font-style:normal;color:var(--gold)}
   .display .period{display:inline-block;width:.15em;height:.15em;border-radius:50%;background:var(--gold);vertical-align:baseline;margin-left:.03em}
-  .lede{margin:42px auto 0;max-width:560px;color:var(--ink-2);font-size:clamp(16px,1.4vw,18.5px);line-height:1.7}
+  .lede{margin:42px auto 0;max-width:560px;width:fit-content;color:var(--ink-2);font-size:clamp(16px,1.4vw,18.5px);line-height:1.7;background:#fff;padding:8px 18px;border-radius:12px}
   .lede b{color:var(--ink);font-weight:700}
   .cta-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;justify-content:center}
   .cta-row .btn{padding:15px 30px;font-size:13.5px}
@@ -799,7 +799,7 @@ const LandingPage = () => (
         <div className="sec-head">
           <div className="sec-label">Specialized Tracks</div>
           <h2 className="sec-title">Four teams.</h2>
-          <p className="sec-sub">관심 분야에 따라 전문 트랙을 선택하고, 교육 → 실습 → 프로젝트로 이어지는 깊이 있는 경험을 쌓습니다.</p>
+          <p className="sec-sub" style={{ maxWidth: 'none' }}>관심 분야에 따라 전문 트랙을 선택하고, 교육 → 실습 → 프로젝트로 이어지는 깊이 있는 경험을 쌓습니다.</p>
         </div>
       </RevealSection>
       <RevealSection>
@@ -856,8 +856,8 @@ const AboutPage = () => (
       <div className="sec-head">
         <div className="sec-label">About</div>
         <h2 className="sec-title">From classroom<br />to capital markets.</h2>
-        <p className="sec-sub">
-          2007년 파생상품 스터디로 시작한 HYFE는 이제 IBD·리서치·퀀트·파생을 아우르는 한양대 대표 학생 금융 학회입니다. 학문적 이론과 실무 현장의 간극을 메우는 것이 우리의 일입니다.
+        <p className="sec-sub" style={{ maxWidth: 'none' }}>
+          2007년 파생상품 스터디로 시작한 HYFE는 이제 IBD·리서치·퀀트·파생을 아우르는 한양대 대표 학생 금융 학회입니다. 학문적 이론과 실무의 간극을 최대한 메우는 것이 목표입니다.
         </p>
         <div style={{ marginTop: 20 }}><span className="pill">IBD · Research · Quant · Derivatives</span></div>
       </div>
