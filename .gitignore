@@ -6,9 +6,11 @@ node_modules/
 # Testing
 /coverage
 
-# Production
+# Production (any depth — e.g. tools/hyfe-club/dist)
 /dist
 /build
+dist/
+build/
 
 # Environment variables
 .env
