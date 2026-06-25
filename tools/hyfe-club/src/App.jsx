@@ -238,7 +238,7 @@ const Hero = () => {
       // 1) rise from bottom-left up to the period dot (ends exactly on it)
       const sx = 0, sy = H * 0.98;
       const wp = [[0, 0], [0.12, 0.16], [0.21, 0.08], [0.33, 0.34], [0.44, 0.24],
-                  [0.56, 0.5], [0.67, 0.4], [0.79, 0.67], [0.89, 0.57], [1, 1]];
+                  [0.56, 0.5], [0.67, 0.4], [0.79, 0.58], [0.89, 0.55], [1, 1]];
       const d = wp.map(([tx, h], i) =>
         (i ? 'L' : 'M') + (sx + (ex - sx) * tx).toFixed(1) + ' ' + (sy + (ey - sy) * h).toFixed(1)).join(' ');
 
