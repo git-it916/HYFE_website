@@ -202,41 +202,75 @@ const LiveClock = () => {
   return <span>{now}</span>;
 };
 
-/* Self-drawing equity curve — wide, faint, sits behind the hero headline */
-const HeroCurve = () => {
-  const lineRef = useRef(null);
-  const W = 1200, H = 320, pad = 16;
-  const pts = [40, 70, 52, 96, 80, 128, 150, 120, 168, 150, 206, 188, 244, 230, 282, 300];
-  const step = W / (pts.length - 1);
-  const max = Math.max(...pts), min = Math.min(...pts);
-  const xy = pts.map((p, i) => [i * step, H - pad - ((p - min) / (max - min)) * (H - 2 * pad)]);
-  const d = xy.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
-  const area = `${d} L ${W} ${H} L 0 ${H} Z`;
-  const last = xy[xy.length - 1];
+/* Hero — the rising curve is measured to end exactly on the period of "alpha."
+   so the line tip and the dot always meet, on any screen size. */
+const Hero = () => {
+  const heroRef = useRef(null);
+  const dotRef = useRef(null);
+  const svgRef = useRef(null);
+  const pathRef = useRef(null);
 
   useEffect(() => {
-    const line = lineRef.current;
-    if (!line) return;
-    const len = line.getTotalLength();
-    line.style.strokeDasharray = String(len);
-    line.style.strokeDashoffset = String(len);
-    line.getBoundingClientRect(); // force reflow
-    line.style.transition = 'stroke-dashoffset 4.6s cubic-bezier(.4,0,.2,1)';
-    line.style.strokeDashoffset = '0';
+    const draw = () => {
+      const hero = heroRef.current, dot = dotRef.current, svg = svgRef.current, path = pathRef.current;
+      if (!hero || !dot || !svg || !path) return;
+      const hr = hero.getBoundingClientRect();
+      const dr = dot.getBoundingClientRect();
+      const W = hr.width, H = hr.height;
+      const ex = dr.left + dr.width / 2 - hr.left;  // period centre x
+      const ey = dr.top + dr.height / 2 - hr.top;   // period centre y
+      const sx = 0, sy = H * 0.98;                  // start: bottom-left
+      // waypoints: (x fraction of sx→ex, height fraction of sy→ey) — last is exactly the dot
+      const wp = [[0, 0], [0.12, 0.16], [0.21, 0.08], [0.33, 0.34], [0.44, 0.24],
+                  [0.56, 0.5], [0.67, 0.4], [0.79, 0.67], [0.89, 0.57], [1, 1]];
+      const pts = wp.map(([tx, h]) => [sx + (ex - sx) * tx, sy + (ey - sy) * h]);
+      const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
+      svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+      svg.setAttribute('width', W);
+      svg.setAttribute('height', H);
+      path.setAttribute('d', d);
+      const len = path.getTotalLength();
+      path.style.transition = 'none';
+      path.style.strokeDasharray = String(len);
+      path.style.strokeDashoffset = String(len);
+      path.getBoundingClientRect(); // force reflow before animating
+      path.style.transition = 'stroke-dashoffset 4.6s cubic-bezier(.4,0,.2,1)';
+      path.style.strokeDashoffset = '0';
+    };
+    draw();
+    let raf = 0;
+    const onResize = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(draw); };
+    window.addEventListener('resize', onResize);
+    // webfont load shifts the period's x — redraw once fonts are ready
+    if (document.fonts?.ready) document.fonts.ready.then(draw).catch(() => {});
+    return () => { window.removeEventListener('resize', onResize); cancelAnimationFrame(raf); };
   }, []);
 
   return (
-    <svg className="chart" viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <linearGradient id="eq-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="rgba(37,99,235,.16)" />
-          <stop offset="1" stopColor="rgba(37,99,235,0)" />
-        </linearGradient>
-      </defs>
-      <path d={area} fill="url(#eq-fill)" />
-      <path ref={lineRef} d={d} fill="none" stroke="var(--gold)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" />
-      <circle cx={last[0]} cy={last[1]} r="5" fill="var(--gold)" className="chart-head" />
-    </svg>
+    <section className="hero" ref={heroRef}>
+      <div className="hero-bg">
+        <div className="hero-glow" />
+        <svg className="hero-curve" ref={svgRef} preserveAspectRatio="none" aria-hidden="true">
+          <path ref={pathRef} fill="none" stroke="var(--gold)" strokeWidth="2.5"
+            strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+      <div className="hero-inner container">
+        <div className="eyebrow">
+          <span className="dot" /> HanYang Financial Engineering · Est. 2007 · <LiveClock />
+        </div>
+        <h1 className="display">Where theory compounds<br />into <em>alpha<span className="period" ref={dotRef} /></em></h1>
+        <p className="lede">
+          <b>한양대학교 대표 금융학회</b><br />
+          엄격한 커리큘럼과 프로젝트로 금융 커리어의 시작을 돕습니다
+        </p>
+        <div className="cta-row">
+          <Magnetic><Link className="btn gold" to="/about">Discover HYFE</Link></Magnetic>
+          <Link className="btn" to="/recruiting/process">Join Us →</Link>
+        </div>
+      </div>
+      <div className="scroll-cue">Scroll</div>
+    </section>
   );
 };
 
@@ -332,12 +366,12 @@ const globalStyles = `
 
   /* ── Hero (full-bleed, centered) ── */
   .hero{position:relative;min-height:calc(100vh - 88px);display:flex;flex-direction:column;
-    align-items:center;justify-content:center;text-align:center;padding:48px 0 clamp(110px,20vh,230px);overflow:hidden}
+    align-items:center;justify-content:center;text-align:center;padding:56px 0 84px;overflow:hidden}
   .hero-bg{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
   .hero-glow{position:absolute;top:-12%;left:50%;transform:translateX(-50%);
     width:min(1000px,120vw);height:620px;border-radius:50%;
     background:radial-gradient(closest-side,rgba(37,99,235,.20),rgba(37,99,235,.06) 55%,transparent 72%)}
-  .hero-curve{position:absolute;left:0;right:0;bottom:0;width:100%;height:26%;opacity:.5}
+  .hero-curve{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
   .hero-inner{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center}
   .eyebrow{display:inline-flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;
     font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);margin-bottom:30px}
@@ -345,6 +379,7 @@ const globalStyles = `
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.35}}
   h1.display{font-weight:800;font-size:clamp(44px,7.5vw,94px);line-height:1.0;letter-spacing:-.04em;color:var(--ink)}
   h1.display em{font-style:normal;color:var(--gold)}
+  .display .period{display:inline-block;width:.15em;height:.15em;border-radius:50%;background:var(--gold);vertical-align:baseline;margin-left:.03em}
   .lede{margin:42px auto 0;max-width:560px;color:var(--ink-2);font-size:clamp(16px,1.4vw,18.5px);line-height:1.7}
   .lede b{color:var(--ink);font-weight:700}
   .cta-row{display:flex;gap:14px;margin-top:40px;flex-wrap:wrap;justify-content:center}
@@ -354,9 +389,6 @@ const globalStyles = `
     display:flex;flex-direction:column;align-items:center;gap:8px}
   .scroll-cue::after{content:'';width:1px;height:30px;background:linear-gradient(var(--gold),transparent);animation:cue 1.8s ease-in-out infinite}
   @keyframes cue{0%,100%{opacity:.3;transform:scaleY(.6)}50%{opacity:1;transform:scaleY(1)}}
-  .chart{display:block;width:100%;height:100%}
-  .chart-head{animation:headpulse 1.6s ease-in-out infinite}
-  @keyframes headpulse{0%,100%{opacity:1}50%{opacity:.4}}
 
   /* ── Stats strip ── */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -480,7 +512,7 @@ const globalStyles = `
   /* ── Responsive ── */
   @media(max-width:880px){
     .hero{min-height:auto;padding:60px 0 70px}
-    .hero-curve{height:30%;opacity:.4}
+    .hero-curve{opacity:.4}
     .vp-grid,.steps,.curriculum,.awards{grid-template-columns:1fr}
     .teams,.about-grid,.ideal-grid{grid-template-columns:1fr}
     .stats{grid-template-columns:repeat(2,1fr)}
@@ -651,28 +683,7 @@ const Layout = ({ children }) => {
 
 const LandingPage = () => (
   <>
-    {/* Hero — full-bleed, centered */}
-    <section className="hero">
-      <div className="hero-bg">
-        <div className="hero-glow" />
-        <HeroCurve />
-      </div>
-      <div className="hero-inner container">
-        <div className="eyebrow">
-          <span className="dot" /> HanYang Financial Engineering · Est. 2007 · <LiveClock />
-        </div>
-        <h1 className="display">Where theory compounds<br />into <em>alpha.</em></h1>
-        <p className="lede">
-          <b>한양대학교 대표 금융학회</b><br />
-          엄격한 커리큘럼과 프로젝트로 금융 커리어의 시작을 돕습니다
-        </p>
-        <div className="cta-row">
-          <Magnetic><Link className="btn gold" to="/about">Discover HYFE</Link></Magnetic>
-          <Link className="btn" to="/recruiting/process">Join Us →</Link>
-        </div>
-      </div>
-      <div className="scroll-cue">Scroll</div>
-    </section>
+    <Hero />
 
     <div className="container">
       {/* Stats */}
