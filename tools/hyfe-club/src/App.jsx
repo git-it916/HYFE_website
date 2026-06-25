@@ -248,8 +248,8 @@ const Hero = () => {
       const cd = cwp.map(([tx, h], i) =>
         (i ? 'L' : 'M') + (ex + dx * tx).toFixed(1) + ' ' + (ey - ry * h).toFixed(1)).join(' ');
 
-      animate(path, d, '4.6s', '0s');     // draw up to the dot
-      animate(cont, cd, '1.8s', '6.6s');  // hold ~2s on the dot, then climb (4.6s + 2s = 6.6s)
+      animate(path, d, '3s', '0s');     // draw up to the dot (3s)
+      animate(cont, cd, '2s', '4.3s');  // hold 1.3s, then climb 2s (3s + 1.3s = 4.3s delay)
     };
     draw();
     let raf = 0;
@@ -304,6 +304,57 @@ const Magnetic = ({ children, ...rest }) => {
     <span ref={ref} onMouseMove={onMove} onMouseLeave={reset} style={{ display: 'inline-flex', transition: 'transform .2s ease' }} {...rest}>
       {children}
     </span>
+  );
+};
+
+/* Easter egg: inside the CTA band, the "Apply Now" button creeps toward the cursor.
+   Uses a damped follow (lerp) so it's smooth, not snappy. Clicking still works (it's a Link). */
+const FollowCTA = () => {
+  const bandRef = useRef(null);
+  const btnRef = useRef(null);
+  const target = useRef({ x: 0, y: 0 });
+  const cur = useRef({ x: 0, y: 0 });
+  const reduce = typeof window !== 'undefined'
+    && window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+
+  useEffect(() => {
+    if (reduce) return;
+    let raf = 0;
+    const tick = () => {
+      cur.current.x += (target.current.x - cur.current.x) * 0.1;  // 0.1 = creep speed
+      cur.current.y += (target.current.y - cur.current.y) * 0.1;
+      const btn = btnRef.current;
+      if (btn) btn.style.transform = `translate(${cur.current.x.toFixed(1)}px, ${cur.current.y.toFixed(1)}px)`;
+      raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [reduce]);
+
+  const onMove = (e) => {
+    if (reduce) return;
+    const btn = btnRef.current;
+    if (!btn) return;
+    const r = btn.getBoundingClientRect();
+    const homeCx = r.left + r.width / 2 - cur.current.x;  // undo current offset → home centre
+    const homeCy = r.top + r.height / 2 - cur.current.y;
+    const maxX = 170, maxY = 60;  // leash so it stays inside the box
+    target.current = {
+      x: Math.max(-maxX, Math.min(maxX, e.clientX - homeCx)),
+      y: Math.max(-maxY, Math.min(maxY, e.clientY - homeCy)),
+    };
+  };
+  const onLeave = () => { target.current = { x: 0, y: 0 }; };
+
+  return (
+    <div className="cta-band" ref={bandRef} onMouseMove={onMove} onMouseLeave={onLeave}>
+      <h3>Ready to start your journey?</h3>
+      <p>HYFE와 함께 금융 커리어의 첫 걸음을 내딛어 보세요.</p>
+      <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
+        <Link className="btn gold follow-btn" to="/recruiting/process" ref={btnRef}>Apply Now</Link>
+        <Link className="btn" to="/about">Learn More</Link>
+      </div>
+    </div>
   );
 };
 
@@ -379,6 +430,7 @@ const globalStyles = `
   .btn.gold{background:var(--gold);color:#fff;border-color:var(--gold);font-weight:700}
   .btn.gold:hover{background:#1d4ed8;border-color:#1d4ed8;color:#fff;box-shadow:0 10px 28px rgba(37,99,235,.28);transform:translateY(-2px)}
   .btn.sm{padding:8px 14px;font-size:11.5px}
+  .follow-btn{transition-property:background,box-shadow,border-color;will-change:transform;position:relative;z-index:1}
 
   /* ── Hero (full-bleed, centered) ── */
   .hero{position:relative;min-height:calc(100vh - 88px);display:flex;flex-direction:column;
@@ -787,14 +839,7 @@ const LandingPage = () => (
     {/* CTA */}
     <section style={{ paddingTop: 0 }}>
       <RevealSection>
-        <div className="cta-band">
-          <h3>Ready to start your journey?</h3>
-          <p>HYFE와 함께 금융 커리어의 첫 걸음을 내딛어 보세요.</p>
-          <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <Magnetic><Link className="btn gold" to="/recruiting/process">Apply Now</Link></Magnetic>
-            <Link className="btn" to="/about">Learn More</Link>
-          </div>
-        </div>
+        <FollowCTA />
       </RevealSection>
     </section>
     </div>
