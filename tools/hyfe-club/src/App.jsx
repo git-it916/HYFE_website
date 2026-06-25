@@ -15,7 +15,7 @@ const activities = [
     id: 'ibd',
     title: 'IBD',
     tag: 'Investment Banking',
-    summary: '산업 분석, 밸류에이션 모델링, 피치북 제작을 통해 딜 실행 역량을 마스터합니다.',
+    summary: '산업·기업 분석과 DCF·Comps 밸류에이션을 익히고, IPO 피치북과 M&A IM을 직접 작성합니다.',
     description: '심층적인 산업 및 기업 분석을 통해 핵심 투자 포인트를 발굴하고, Trading Comps와 DCF를 포함한 밸류에이션 기법을 습득합니다. IPO Pitch Book과 M&A IM 작성 실습을 통해 딜 프로세스 전반에 대한 이해를 구축합니다.',
     bullets: [
       '산업 및 기업 심층 분석을 통한 핵심 투자 포인트 도출',
@@ -28,7 +28,7 @@ const activities = [
     id: 'research',
     title: 'Research',
     tag: 'Equity Research',
-    summary: '탑다운 분석, 섹터 스크리닝, 엄격한 밸류에이션 프레임워크를 통해 투자 확신을 개발합니다.',
+    summary: '탑다운 섹터 분석으로 유망 종목을 발굴하고, 목표주가와 투자의견을 담은 리서치 리포트를 작성합니다.',
     description: '탑다운 접근법을 통해 포괄적인 섹터 이해를 구축하고 탑픽 기회를 발굴합니다. 상대가치 및 절대가치 밸류에이션 방법론으로 뒷받침되는 투자 논리를 작성하고, 방어 가능한 목표주가와 실행 가능한 추천의견을 도출합니다.',
     bullets: [
       '탑다운 프레임워크: 거시 → 섹터 → 개별 종목 선정',
@@ -41,7 +41,7 @@ const activities = [
     id: 'quant',
     title: 'Quant',
     tag: 'Quantitative Finance',
-    summary: '알고리즘 알파 발굴과 포트폴리오 최적화를 통해 시스템적 전략을 구축합니다.',
+    summary: 'Python으로 알파 시그널을 발굴하고, 백테스트와 포트폴리오 최적화로 전략을 검증합니다.',
     description: 'Algorithmic Quant와 Portfolio Quant 두 개의 전문 트랙을 운영하며, 마켓 마이크로스트럭처를 탐구하여 알파를 생성하고 현대 포트폴리오 이론을 적용하여 전략을 구축합니다. 시그널 리서치, 백테스팅, 리스크 관리에 대한 실무 경험을 쌓습니다.',
     bullets: [
       'Algorithmic Quant: 마켓 마이크로스트럭처 분석 및 알파 시그널 발굴',
@@ -54,7 +54,7 @@ const activities = [
     id: 'derivatives',
     title: 'Derivatives',
     tag: 'Fixed Income & Derivatives',
-    summary: '정책 분석과 구조화 상품을 통해 거시 환경과 파생상품 가격결정을 이해합니다.',
+    summary: '금리·통화정책을 해석하고, 스왑·옵션·선물의 가격결정과 헤지 전략을 실습합니다.',
     description: '경제 지표 및 통화정책에 대한 거시 분석을 기반으로 스왑, 옵션, 선물 가격결정에 대한 전문성을 개발합니다. 이론적 프레임워크를 실제 시장 데이터에 적용하여 복잡한 파생상품 포지션을 구조화하고 헤지하는 능력을 키웁니다.',
     bullets: [
       '거시 분석: 경제 데이터, 금리, 중앙은행 정책 해석',
@@ -116,9 +116,9 @@ const recruitingTabs = {
   apply: {
     title: 'How to Apply',
     body: [
-      '공식 블로그 또는 네이버 카페에서 지원서 양식을 다운로드합니다.',
-      '플랫폼에 안내된 대로 작성한 양식을 이메일로 제출합니다.',
-      '최신 마감일 및 공지사항은 공식 커뮤니티 페이지를 정기적으로 확인하세요.',
+      '1. 공식 블로그 또는 네이버 카페에서 지원서 양식을 다운로드합니다.',
+      '2. 카페에 안내된 대로 작성한 양식을 이메일로 제출합니다.',
+      '3. 최신 마감일 및 공지사항은 공식 커뮤니티 페이지를 정기적으로 확인하세요.',
     ],
   },
 };
@@ -209,33 +209,47 @@ const Hero = () => {
   const dotRef = useRef(null);
   const svgRef = useRef(null);
   const pathRef = useRef(null);
+  const contRef = useRef(null);
 
   useEffect(() => {
+    const animate = (el, d, dur, delay) => {
+      el.setAttribute('d', d);
+      const len = el.getTotalLength();
+      el.style.transition = 'none';
+      el.style.strokeDasharray = String(len);
+      el.style.strokeDashoffset = String(len);
+      el.getBoundingClientRect(); // force reflow before animating
+      el.style.transition = `stroke-dashoffset ${dur} cubic-bezier(.4,0,.2,1) ${delay}`;
+      el.style.strokeDashoffset = '0';
+    };
     const draw = () => {
-      const hero = heroRef.current, dot = dotRef.current, svg = svgRef.current, path = pathRef.current;
-      if (!hero || !dot || !svg || !path) return;
+      const hero = heroRef.current, dot = dotRef.current, svg = svgRef.current;
+      const path = pathRef.current, cont = contRef.current;
+      if (!hero || !dot || !svg || !path || !cont) return;
       const hr = hero.getBoundingClientRect();
       const dr = dot.getBoundingClientRect();
       const W = hr.width, H = hr.height;
       const ex = dr.left + dr.width / 2 - hr.left;  // period centre x
       const ey = dr.top + dr.height / 2 - hr.top;   // period centre y
-      const sx = 0, sy = H * 0.98;                  // start: bottom-left
-      // waypoints: (x fraction of sx→ex, height fraction of sy→ey) — last is exactly the dot
-      const wp = [[0, 0], [0.12, 0.16], [0.21, 0.08], [0.33, 0.34], [0.44, 0.24],
-                  [0.56, 0.5], [0.67, 0.4], [0.79, 0.67], [0.89, 0.57], [1, 1]];
-      const pts = wp.map(([tx, h]) => [sx + (ex - sx) * tx, sy + (ey - sy) * h]);
-      const d = pts.map((p, i) => (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1)).join(' ');
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
       svg.setAttribute('width', W);
       svg.setAttribute('height', H);
-      path.setAttribute('d', d);
-      const len = path.getTotalLength();
-      path.style.transition = 'none';
-      path.style.strokeDasharray = String(len);
-      path.style.strokeDashoffset = String(len);
-      path.getBoundingClientRect(); // force reflow before animating
-      path.style.transition = 'stroke-dashoffset 4.6s cubic-bezier(.4,0,.2,1)';
-      path.style.strokeDashoffset = '0';
+
+      // 1) rise from bottom-left up to the period dot (ends exactly on it)
+      const sx = 0, sy = H * 0.98;
+      const wp = [[0, 0], [0.12, 0.16], [0.21, 0.08], [0.33, 0.34], [0.44, 0.24],
+                  [0.56, 0.5], [0.67, 0.4], [0.79, 0.67], [0.89, 0.57], [1, 1]];
+      const d = wp.map(([tx, h], i) =>
+        (i ? 'L' : 'M') + (sx + (ex - sx) * tx).toFixed(1) + ' ' + (sy + (ey - sy) * h).toFixed(1)).join(' ');
+
+      // 2) continuation: after a pause, keep climbing up-right past the dot
+      const dx = (W - ex) * 0.9, ry = ey * 0.62;
+      const cwp = [[0, 0], [0.24, 0.32], [0.42, 0.18], [0.66, 0.62], [0.85, 0.48], [1, 0.92]];
+      const cd = cwp.map(([tx, h], i) =>
+        (i ? 'L' : 'M') + (ex + dx * tx).toFixed(1) + ' ' + (ey - ry * h).toFixed(1)).join(' ');
+
+      animate(path, d, '4.6s', '0s');     // draw up to the dot
+      animate(cont, cd, '1.8s', '6.6s');  // hold ~2s on the dot, then climb (4.6s + 2s = 6.6s)
     };
     draw();
     let raf = 0;
@@ -252,6 +266,8 @@ const Hero = () => {
         <div className="hero-glow" />
         <svg className="hero-curve" ref={svgRef} preserveAspectRatio="none" aria-hidden="true">
           <path ref={pathRef} fill="none" stroke="var(--gold)" strokeWidth="2.5"
+            strokeLinecap="round" strokeLinejoin="round" />
+          <path ref={contRef} fill="none" stroke="var(--gold)" strokeWidth="2.5"
             strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </div>
@@ -320,7 +336,7 @@ const globalStyles = `
   html{scroll-behavior:smooth}
   html,body,#root{min-height:100%}
   body{font-family:var(--sans);background:var(--bg);color:var(--ink-2);
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5}
+    -webkit-font-smoothing:antialiased;overflow-x:hidden;line-height:1.5;word-break:keep-all;overflow-wrap:break-word}
   a{color:inherit;text-decoration:none}
   ::selection{background:var(--gold);color:#fff}
 
@@ -480,6 +496,9 @@ const globalStyles = `
   .rtab{padding:24px;border-radius:10px;border:1px solid var(--line);background:var(--panel);transition:.25s;display:block}
   .rtab:hover{border-color:var(--panel-line)}
   .rtab.active{border-color:var(--gold);background:var(--gold-soft)}
+  .rtab.apply{background:rgba(229,104,122,.07);border-color:rgba(229,104,122,.28)}
+  .rtab.apply:hover{border-color:rgba(229,104,122,.5)}
+  .rtab.apply.active{background:rgba(229,104,122,.14);border-color:var(--down)}
   .rtab .tt{font-size:20px;font-weight:700;margin-bottom:4px;color:var(--ink)}
   .rtab .td{font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
   .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
@@ -705,7 +724,7 @@ const LandingPage = () => (
       <RevealSection>
         <div className="sec-head">
           <div className="sec-label">Why HYFE</div>
-          <h2 className="sec-title">Growth &amp; Success,<br />engineered.</h2>
+          <h2 className="sec-title">Growth &amp; Success.</h2>
           <p className="sec-sub">단순한 금융 동아리를 넘어, 여러분의 커리어를 위한 발판입니다.</p>
         </div>
       </RevealSection>
@@ -727,7 +746,7 @@ const LandingPage = () => (
       <RevealSection>
         <div className="sec-head">
           <div className="sec-label">Specialized Tracks</div>
-          <h2 className="sec-title">Four desks.<br />One trading floor.</h2>
+          <h2 className="sec-title">Four teams.</h2>
           <p className="sec-sub">관심 분야에 따라 전문 트랙을 선택하고, 교육 → 실습 → 프로젝트로 이어지는 깊이 있는 경험을 쌓습니다.</p>
         </div>
       </RevealSection>
@@ -813,7 +832,7 @@ const AboutPage = () => (
     <RevealSection style={{ marginTop: 70 }}>
       <div className="sec-head">
         <div className="sec-label">Curriculum</div>
-        <h2 className="sec-title">A 3-stage learning path.</h2>
+        <h2 className="sec-title">3 steps learning path.</h2>
       </div>
     </RevealSection>
     <RevealSection>
@@ -847,7 +866,6 @@ const PeoplePage = () => (
       <div className="sec-head">
         <div className="sec-label">People</div>
         <h2 className="sec-title">We're looking for attitude,<br />not pedigree.</h2>
-        <p className="sec-sub">배경이 아닌 태도를 봅니다. HYFE가 찾는 사람은 이런 사람입니다.</p>
       </div>
     </RevealSection>
 
@@ -1126,7 +1144,7 @@ const RecruitingPage = ({ mode }) => {
           <div className="sec-label">Recruiting</div>
           <h2 className="sec-title">Join HYFE.</h2>
           <p className="sec-sub">
-            배우고, 기여하고, 성장할 준비가 된 열정적인 사람을 찾습니다. 완성도가 아닌 잠재력을 발굴하도록 설계된 프로세스입니다.
+            배우고, 기여하고, 성장할 준비가 된 열정적인 사람을 찾습니다.<br />많은 지원 부탁드립니다.
           </p>
         </div>
       </RevealSection>
@@ -1137,9 +1155,9 @@ const RecruitingPage = ({ mode }) => {
             <div className="tt">Process</div>
             <div className="td">지원 단계 및 타임라인 개요</div>
           </Link>
-          <Link className={`rtab ${mode === 'apply' ? 'active' : ''}`} to="/recruiting/apply">
+          <Link className={`rtab apply ${mode === 'apply' ? 'active' : ''}`} to="/recruiting/apply">
             <div className="tt">How to Apply</div>
-            <div className="td">제출 가이드라인 및 플랫폼 세부정보</div>
+            <div className="td">제출 가이드라인 및 카페 세부정보</div>
           </Link>
         </div>
       </RevealSection>
@@ -1160,7 +1178,7 @@ const RecruitingPage = ({ mode }) => {
         <RevealSection>
           <div className="panel" style={{ marginTop: 0 }}>
             <h3>{tab.title}</h3>
-            <ul>{tab.body.map((line) => <li key={line}>{line}</li>)}</ul>
+            <ul style={{ listStyle: 'none', paddingLeft: 0 }}>{tab.body.map((line) => <li key={line}>{line}</li>)}</ul>
           </div>
         </RevealSection>
       )}
@@ -1169,7 +1187,7 @@ const RecruitingPage = ({ mode }) => {
         <RevealSection>
           <div className="cta-band" style={{ marginTop: 24 }}>
             <h3>Ready to start your journey?</h3>
-            <p>지원서 양식을 다운로드하여 공식 플랫폼을 통해 제출하세요.</p>
+            <p>지원서 양식을 다운로드하여 공식 카페를 통해 제출하세요.</p>
             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center' }}>
               <a className="btn gold" href="https://cafe.naver.com/f-e/cafes/28919085/menus/1?viewType=L" target="_blank" rel="noreferrer">Visit Application Portal</a>
               <Link className="btn" to="/recruiting/process">View Process</Link>
