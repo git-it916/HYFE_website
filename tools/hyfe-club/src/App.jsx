@@ -835,7 +835,7 @@ const PeoplePage = () => (
     <RevealSection>
       <div className="sec-head">
         <div className="sec-label">People</div>
-        <h2 className="sec-title">We hire for attitude,<br />not pedigree.</h2>
+        <h2 className="sec-title">We're looking for attitude,<br />not pedigree.</h2>
         <p className="sec-sub">배경이 아닌 태도를 봅니다. HYFE가 찾는 사람은 이런 사람입니다.</p>
       </div>
     </RevealSection>
